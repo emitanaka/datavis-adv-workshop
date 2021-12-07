@@ -1,0 +1,59 @@
+---
+title: "Day 2: Advanced data visualization with R"
+subtitle: Conversing and engaging users with interactive graphics in R
+author: "Di Cook"
+date: "9th December 2021"
+---
+
+## Slides
+
+We recommend that you open the html slides <i class="fas fa-link"></i> with [Google Chrome web browser](https://www.google.com/intl/en_au/chrome/). 
+
+0. Getting started [<i class="fas fa-link"></i>](slides/day2-session0.html) [<i class="fas fa-file-pdf"></i>](slides/day2-session0.pdf)
+1. Overview of tools for interactive plots [<i class="fas fa-link"></i>](slides/day2-session1.html) [<i class="fas fa-file-pdf"></i>](slides/day2-session1.pdf)
+2. Digging deeper into reactive elements in shiny [<i class="fas fa-link"></i>](slides/day2-session2.html) [<i class="fas fa-file-pdf"></i>](slides/day2-session2.pdf)
+3. Web apps to deliver effective data visualisation [<i class="fas fa-link"></i>](slides/day2-session3.html) [<i class="fas fa-file-pdf"></i>](slides/day2-session3.pdf)
+
+## Schedule
+
+Time | Activity 
+:----|:---
+9.00-9.45 | **Lesson 1:** Overview of tools for interactive plots
+9.45-10:00 |  *Break*
+10:00-10.45 | **Lesson 2:** Digging deeper into reactive elements in shiny 
+10.45-11.00 | *Break*
+11.00-11.45 | **Lesson 3:** Web apps to deliver effective data visualisation 
+11.45-12:00 | *Break*
+
+## Data
+
+Download the folowing data for the exercises:
+
+* 
+
+
+
+## Exercises
+
+Before getting started, you will need to install the following R-packages:
+
+```r
+```{r, echo = FALSE, results='asis'}
+pkgs <- readLines("install-pkgs-day2.txt")
+pkgsq <- paste0("'", pkgs, "'")
+glue::glue("
+  install.packages(c( {paste0(pkgsq, collapse=',\\n\\t\\t\\t\\t\\t')}))
+  ")
+```
+```
+
+
+
+
+1. Overview of tools for interactive plots <a class="tag" href="exercises/day2-exercise-01.Rmd" download><i class="fas fa-download"></i> Rmd</a> <a class="tag" href="exercises/day2-exercise-01.html" target="_blank"><i class="fas fa-globe"></i> html</a> <a class="tag" href="exercises/day2-exercise-01-solution.Rmd" download><i class="fas fa-download"></i> solution Rmd</a> <a class="tag" href="exercises/day2-exercise-01-solution.html" target="_blank"><i class="fas fa-globe"></i> html solution</a>
+
+2. Digging deeper into reactive elements in shiny  <a class="tag" href="exercises/day2-exercise-02.Rmd" download><i class="fas fa-download"></i> Rmd</a> <a class="tag" href="exercises/day2-exercise-02.html" target="_blank"><i class="fas fa-globe"></i> html</a> <a class="tag" href="exercises/day2-exercise-02-solution.Rmd" download><i class="fas fa-download"></i> solution Rmd</a> <a class="tag" href="exercises/day2-exercise-02-solution.html" target="_blank"><i class="fas fa-globe"></i> html solution</a>
+
+
+3. eb apps to deliver effective data visualisation <a class="tag" href="exercises/day2-exercise-03.Rmd" download><i class="fas fa-download"></i> Rmd</a> <a class="tag" href="exercises/day2-exercise-03.html" target="_blank"><i class="fas fa-globe"></i> html</a> <a class="tag" href="exercises/day2-exercise-03-solution.Rmd" download><i class="fas fa-download"></i> solution Rmd</a> <a class="tag" href="exercises/day2-exercise-03-solution.html" target="_blank"><i class="fas fa-globe"></i> html solution</a>
+

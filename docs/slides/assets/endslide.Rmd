@@ -1,0 +1,18 @@
+
+class: font_smaller
+background-color: #e5e5e5
+
+# Session Information
+
+.overflow-scroll.h-80[
+
+```{r}
+devtools::session_info()
+```
+]
+
+
+These slides are licensed under <br><center><a href="https://creativecommons.org/licenses/by-sa/3.0/au/"><img src="images/cc.svg" style="height:2em;"/><img src="images/by.svg" style="height:2em;"/><img src="images/sa.svg" style="height:2em;"/></a></center>
+
+
+

@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Advanced Data Visualisation with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Emi Tanaka" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <link href="libs/countdown-0.3.5/countdown.css" rel="stylesheet" />
+    <script src="libs/countdown-0.3.5/countdown.js"></script>
+    <link rel="stylesheet" href="assets/font-awesome-all.css" type="text/css" />
+    <link rel="stylesheet" href="assets/tachyons-addon.css" type="text/css" />
+    <link rel="stylesheet" href="assets/animate.css" type="text/css" />
+    <link rel="stylesheet" href="assets/fira-code.css" type="text/css" />
+    <link rel="stylesheet" href="assets/boxes.css" type="text/css" />
+    <link rel="stylesheet" href="assets/styles.css" type="text/css" />
+    <link rel="stylesheet" href="assets/monash-brand.css" type="text/css" />
+    <link rel="stylesheet" href="assets/monash-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="assets/slide-types.css" type="text/css" />
+    <link rel="stylesheet" href="assets/table.css" type="text/css" />
+    <link rel="stylesheet" href="assets/custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+class: middle center hide-slide-number monash-bg-gray80
+
+
+
+
+
+.info-box.w-60.bg-white[
+These slides are viewed best by Chrome or Firefox and occasionally need to be refreshed if elements did not load properly. See &lt;a href=day1-session1.pdf&gt;here for the PDF &lt;i class="fas fa-file-pdf"&gt;&lt;/i&gt;&lt;/a&gt;. 
+]
+
+&lt;br&gt;
+
+.white[Press the **right arrow** to progress to the next slide!]
+
+
+
+---
+
+class: title-slide
+count: false
+background-image: url("images/bg-01.png")
+
+# .monash-blue[Advanced Data Visualisation with R]
+
+&lt;h1 class="monash-blue" style="font-size: 30pt!important;"&gt;&lt;/h1&gt;
+
+&lt;br&gt;
+
+&lt;h2 style="font-weight:900!important;"&gt;R Graphics using `grid`&lt;/h2&gt;
+
+.bottom_abs.width100[
+
+Instructor: *Emi Tanaka*
+
+
+
+&lt;i class="fas fa-envelope"&gt;&lt;/i&gt;  emi.tanaka@monash.edu
+
+&lt;i class="fas fa-calendar-alt"&gt;&lt;/i&gt; 8th Dec 2021 @ Statistical Society of Australia Canberra Branch | Zoom
+
+&lt;br&gt;
+
+]
+
+
+
+---
+
+class: transition animated slideInLeft
+
+
+# &lt;i class="fab fa-r-project"&gt;&lt;/i&gt; *Graphics*
+
+.footnote[
+Murrell (2019) R Graphics. CRC Press.
+]
+
+&lt;style type="text/css"&gt;
+.primitive {
+  height: 80px;
+  padding: 5px;
+}
+&lt;/style&gt;
+
+---
+
+# R graphics system
+
+&lt;img src="images/output/r-graphics-system.png" width="100%"&gt;
+
+---
+
+# Base graphics
+
+.center[
+&lt;img src="images/output/base-graphics.png" width="70%"&gt;
+]
+
+---
+
+# `ggplot` graphics
+
+.center[
+&lt;img src="images/output/ggplot-graphics.png" width="60%"&gt;
+]
+
+
+---
+
+# Graphics model in R
+
+* There are two main **graphics models** in R
+
+.flex[
+.w-50.center[
+
+## Base `graphics`
+&lt;br&gt;`library(graphics)`&lt;br&gt; .f5[(typically already loaded)]&lt;br&gt;&lt;br&gt;
+&lt;img src="images/painting.jpg" width="60%" class="ba"&gt;
+]
+.w-50.center[
+
+{{content}}
+]
+]
+
+--
+
+## `grid` graphics
+
+`library(grid)`
+
+&lt;img src="images/animator.jpg" width="240px" class="ba"&gt;  
+{{content}}
+--
+
+&lt;img src="images/printer.svg" width="86px"&gt; 
+{{content}}
+--
+
+&lt;img src="images/print.jpg" width="200px" class="ba"&gt;
+
+
+
+---
+
+class: transition animated slideInLeft
+
+# .monash-white[`grid`]
+
+
+
+
+
+
+---
+
+# `grid` R-package
+
+
+* The `grid` package contains the low-level functions to create, manipulate and &lt;br&gt;draw **gr**aphical **ob**jects (grob).
+--
+
+
+* The `grid` package is a **base package** and so is included in standard R installations
+
+.f4[
+
+```r
+*packageDescription("grid")
+```
+
+```
+Package: grid
+Version: 4.1.2
+Priority: base
+Title: The Grid Graphics Package
+Author: Paul Murrell &lt;paul@stat.auckland.ac.nz&gt;
+Maintainer: R Core Team &lt;do-use-Contact-address@r-project.org&gt;
+Contact: R-help mailing list &lt;r-help@r-project.org&gt;
+Description: A rewrite of the graphics layout capabilities, plus some
+        support for interaction.
+Imports: grDevices, utils
+License: Part of R 4.1.2
+NeedsCompilation: yes
+Built: R 4.1.2; x86_64-apple-darwin17.0; 2021-11-01 20:58:55 UTC; unix
+
+-- File: /Library/Frameworks/R.framework/Versions/4.1/Resources/library/grid/Meta/package.rds 
+```
+]
+
+
+---
+
+# Graphical objects a.k.a. "Grobs"
+
+* The base packages `stats`, `utils`, `datasets`, `methods`, `base`, `graphics` and **`grDevices`** are automatically loaded in a standard launch of R.
+
+
+```r
+library(grid)
+```
+
+--
+
+
+
+
+.flex.mt3[
+.w-50.pr2[
+
+```r
+grid.circle()
+```
+
+&lt;img src="images/day1-session1/grid-circle-1.png" width="216" style="display: block; margin: auto;" /&gt;
+
+]
+.w-50[
+{{content}}
+]
+]
+
+--
+
+
+```r
+circleGrob()
+```
+
+```
+## circle[GRID.circle.94]
+```
+{{content}}
+
+--
+
+
+```r
+grid.draw(circleGrob())
+```
+
+&lt;img src="images/day1-session1/grob-circle-draw-1.png" width="216" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Graphical primitives in `grid`
+
+.flex.mt3[
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-1.png" class="primitive"&gt;  
+`grid.lines()`  
+`linesGrob()`
+]]
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-2.png" class="primitive"&gt;  
+`grid.polyline()`  
+`polylineGrob()`
+]]
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-3.png" class="primitive"&gt;  
+`grid.segments()`
+`segmentsGrob()` 
+]]
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-4.png" class="primitive"&gt;  
+`grid.xspline()`  
+`xsplineGrob()`
+]]
+.w-20.center[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-5.png" class="primitive"&gt;  
+`grid.bezier()`  
+`bezierGrob()`
+]]
+]
+.flex.mt3[
+
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-11.png" class="primitive"&gt;  
+`grid.text()`  
+`textGrob()`
+]]
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-12.png" class="primitive"&gt;  
+`grid.raster()`  
+`rasterGrob()`
+]]
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-8.png" class="primitive"&gt;  
+`grid.circle()`  
+`circleGrob()`
+]]
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-9.png" class="primitive"&gt;  
+`grid.polygon()`  
+`polygonGrob()`
+]]
+.w-20.center[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-10.png" class="primitive"&gt;  
+`grid.path()`  
+`pathGrob()`
+]]
+]
+
+.flex.mt3[
+
+
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-13.png" class="primitive"&gt;  
+`grid.curve()`  
+`curveGrob()`
+]]
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-14.png" class="primitive"&gt;  
+`grid.points()` 
+`pointsGrob()`
+]]
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-6.png" class="primitive"&gt;  
+`grid.rect()`  
+`rectGrob()`
+]]
+.w-20.center.mr3[
+.ba[
+&lt;img src="images/day1-session1/grid-primitives-7.png" class="primitive"&gt;  
+`grid.roundrect()`  
+`roundrectGrob()`
+]]
+.w-20[
+Convention of function names:
+
+`grid.`.monash-red2[`primitive`]`()`  
+.monash-red2[`primitive`]`Grob()`
+]
+]
+
+---
+
+# Higher-level functions
+
+* Most functions in `grid` are low-level functions but *selected number of higher-level functions exist*
+* The output of these functions combine multiple graphical primitives 
+
+
+```r
+pushViewport(plotViewport())
+pushViewport(viewport(xscale = c(0, 100)))
+grid.xaxis()
+```
+
+&lt;img src="images/day1-session1/unnamed-chunk-4-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+# Making your own grobs from graphical primitive 
+
+
+
+```r
+shape &lt;- circleGrob(x = 0.5, y = 0.5, r = 0.5, name = "shape")
+eyes &lt;- circleGrob(x = c(0.25, 0.75), y = 0.5, r = 0.05, 
+                   gp = gpar(fill = "black"), name = "eyes")
+mouth &lt;- circleGrob(x = 0.5, y = 0.2, r = 0.1, name = "mouth")
+```
+--
+
+
+```r
+face1 &lt;- gList(shape, eyes, mouth)
+face2 &lt;- grobTree(shape, eyes, mouth, name = "face")
+```
+
+--
+
+.flex.mt2[
+.w-20.f4.pr3[
+
+```r
+grid.draw(face1)
+```
+
+&lt;img src="images/day1-session1/grob-combined-draw1-1.png" width="216" style="display: block; margin: auto;" /&gt;
+
+]
+.w-20.pr3.f4[
+
+```r
+grid.draw(face2)
+```
+
+&lt;img src="images/day1-session1/grob-combined-draw2-1.png" width="216" style="display: block; margin: auto;" /&gt;
+
+]
+.w-20.f4.pr3[
+
+```r
+grid.ls(face1)
+```
+
+```
+## shape
+## eyes
+## mouth
+```
+
+```r
+grid.ls(face2)
+```
+
+```
+## face
+##   shape
+##   eyes
+##   mouth
+```
+
+]
+.w-40.f4[
+{{content}}
+]
+]
+
+--
+
+
+```r
+class(face1)
+```
+
+```
+## [1] "gList"
+```
+
+```r
+class(face2)
+```
+
+```
+## [1] "gTree" "grob"  "gDesc"
+```
+
+---
+
+# Basic creators of grobs
+
+.flex[
+.w-50.pr3[
+* Drawing details for graphical primitives are written in C
+
+```r
+g1 &lt;- grob(x = unit(0.5, "npc"), 
+           y = unit(0.5, "npc"), 
+           r = unit(0.5, "npc"), 
+           cl = "circle")
+grid.draw(g1)
+```
+
+&lt;img src="images/day1-session1/grob-1.png" width="144" style="display: block; margin: auto;" /&gt;
+* You likely won't ever use this approach
+]
+.w-50[
+{{content}}
+]
+]
+
+--
+
+* Creating a flexible tree structure with grobs 
+
+```r
+g2 &lt;- gTree(children = gList(shape, 
+                             eyes, 
+                             mouth))
+grid.draw(g2)
+```
+
+&lt;img src="images/day1-session1/gtree-1.png" width="144" style="display: block; margin: auto;" /&gt;
+
+{{content}}
+
+--
+
+* Note: `grobTree(x)` is essentially `gTree(children = x)`
+
+
+
+---
+
+# Working with graphical outputs
+
+&lt;br&gt;
+
+Work with output | Work with grobs | Description
+--- | --- | ---
+`grid.get()` | `getGrob()` | Return a copy of grobs
+`grid.edit()` | `editGrob()` | Modifies grobs
+`grid.add()` | `addGrob()` | Add a grob
+`grid.remove()` | `removeGrob()` | Remove grobs
+`grid.set()` | `setGrob()` | Replace grobs
+
+
+Along with some other helpful functions like :
+
+* `grid.newpage()` to erase current device or move to a new page
+* `grid.grep()` to find all matching grobs 
+
+---
+
+# Working with graphical outputs in action
+
+.flex[
+.w-50.pr3[
+
+```r
+grid.ls(face2)
+```
+
+```
+## face
+##   shape
+##   eyes
+##   mouth
+```
+
+```r
+grid.draw(removeGrob(face2, "mouth"))
+```
+
+&lt;img src="images/day1-session1/face-with-no-mouth-1.png" width="216" style="display: block; margin: auto;" /&gt;
+]
+.w-50[
+{{content}}
+]
+]
+
+--
+
+
+```r
+xaxis &lt;- xaxisGrob()
+```
+
+{{content}}
+
+--
+
+
+```r
+grid.ls(xaxis)
+```
+
+```
+## GRID.xaxis.99
+```
+
+* This should include primitives?
+
+{{content}}
+
+--
+
+* The `xaxis` contains no children 
+* This is because the tick marks are only drawn when signalled to draw
+
+{{content}}
+
+--
+
+
+```r
+xaxisf &lt;- grid.force(xaxis)
+grid.ls(xaxisf)
+```
+
+```
+## GRID.xaxis.99
+##   major
+##   ticks
+##   labels
+```
+
+&lt;img src="images/day1-session1/unnamed-chunk-7-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+# Graphical parameters in `grid`
+
+
+.flex.mt2[
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-1.png" class="primitive"&gt;  
+`col`  
+color
+]]
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-2.png" class="primitive"&gt;  
+`fill`  
+fill
+]]
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-3.png" class="primitive"&gt;  
+`alpha`  
+opacity
+]]
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-4.png" class="primitive"&gt;  
+`lwd`  
+line width
+]]
+.w-20.center[
+.ba[
+&lt;img src="images/day1-session1/gpars-5.png" class="primitive"&gt;  
+`lex`  
+line width expansion
+]]
+
+]
+
+.flex.mt2[
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-6.png" class="primitive"&gt;  
+`lty`  
+line type
+]]
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-7.png" class="primitive"&gt;  
+`lineend`  
+line end style
+]]
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-8.png" class="primitive"&gt;  
+`linejoin`  
+line join style
+]]
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-9.png" class="primitive"&gt;  
+`linemitre`  
+line mitre limit
+]]
+.w-20[
+All graphical primitives have a `gp` argument to parse with `grid::gpar()`
+
+]]
+
+.flex.mt2[
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-10.png" class="primitive"&gt;  
+`cex`  
+character expansion
+]]
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-11.png" class="primitive"&gt;  
+`fontsize`  
+font size
+]]
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-12.png" class="primitive"&gt;  
+`fontface`  
+font face
+]]
+.w-20.center.mr2[
+.ba[
+&lt;img src="images/day1-session1/gpars-13.png" class="primitive"&gt;  
+`fontfamily`  
+font family
+]]
+.w-20.center[
+.ba[
+&lt;img src="images/day1-session1/gpars-14.png" class="primitive"&gt;  
+`lineheight`  
+line height
+]]
+
+]
+
+---
+
+class: transition animated slideInLeft
+
+# Coodinate systems
+
+---
+
+# The canvas
+
+&lt;br&gt;
+&lt;img src="images/day1-session1/vp-root-1.png" width="576" class='ba' style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Coordinate systems
+
+&lt;table class=" lightable-classic" style='font-family: "Arial Narrow", "Source Sans Pro", sans-serif; width: auto !important; margin-left: auto; margin-right: auto;'&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Coordinate system &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Description &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;code class="monash-black f4"&gt;"native"&lt;/code&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Relative to the scales of the current viewport &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;code class="monash-black f4"&gt;"npc"&lt;/code&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Normalised parent coordinates &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;code class="monash-black f4"&gt;"snpc"&lt;/code&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Square normalised parent coordinates &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;code class="monash-black f4"&gt;"in"&lt;/code&gt;, &lt;code class="monash-black f4"&gt;"cm"&lt;/code&gt;, &lt;code class="monash-black f4"&gt;"mm"&lt;/code&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Physical inches, centimeters, millimeters &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;code class="monash-black f4"&gt;"pt"&lt;/code&gt;, &lt;code class="monash-black f4"&gt;"bigpts"&lt;/code&gt;, &lt;code class="monash-black f4"&gt;"picas"&lt;/code&gt;,&lt;br&gt; &lt;code class="monash-black f4"&gt;"dida"&lt;/code&gt;, &lt;code class="monash-black f4"&gt;"cicero"&lt;/code&gt;, &lt;code class="monash-black f4"&gt;"scaledpts"&lt;/code&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 72.27 points = 1 inch, 72 big points = 1 inch, 12 points = 1 pica,&lt;br&gt; 1157 dida = 1248 points, 1 cicero = 12 dida, 65536 scaled points = 1 point &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;code class="monash-black f4"&gt;"char"&lt;/code&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Multiples of the current font size &lt;span class="f5"&gt;(&lt;code class="monash-black f4"&gt;fontsize&lt;/code&gt; and &lt;code class="monash-black f4"&gt;cex&lt;/code&gt;)&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;code class="monash-black f4"&gt;"line"&lt;/code&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Multiples of the height of a text line &lt;span class="f5"&gt;(&lt;code class="monash-black f4"&gt;fontsize&lt;/code&gt;, &lt;code class="monash-black f4"&gt;cex&lt;/code&gt; and &lt;code class="monash-black f4"&gt;lineheight&lt;/code&gt;)&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;code class="monash-black f4"&gt;"strwidth"&lt;/code&gt;, &lt;code class="monash-black f4"&gt;"strheight"&lt;/code&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Multiples of the width/height of a given string &lt;span class="f5"&gt;(&lt;code class="monash-black f4"&gt;fontsize&lt;/code&gt;, &lt;code class="monash-black f4"&gt;cex&lt;/code&gt;, &lt;code class="monash-black f4"&gt;fontfamily&lt;/code&gt;, and &lt;code class="monash-black f4"&gt;fontface&lt;/code&gt;)&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;code class="monash-black f4"&gt;"grobx"&lt;/code&gt;, &lt;code class="monash-black f4"&gt;"groby"&lt;/code&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Multiples of the x- and y-location on the boundary of a given grob &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;code class="monash-black f4"&gt;"grobwidth"&lt;/code&gt;, &lt;code class="monash-black f4"&gt;"grobheight"&lt;/code&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Multiples of the width/height of a given grob &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+---
+
+# Drawing with `grid` .circle.monash-bg-white.monash-blue[1]
+
+.flex[
+.w-50[
+
+```r
+grid.rect(x = 0, 
+          y = 0, 
+          width = 0.25, 
+          height = 0.25, 
+          default.units = "npc",
+          just = c("left", "bottom"), 
+          gp = gpar(fill = "pink"),
+          vp = NULL)
+```
+
+]
+.w-50[
+&lt;img src="images/day1-session1/vp-rect1-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+.f4[
+* The grid lines are drawn for your convenience
+]
+
+
+]
+]
+
+---
+
+# Drawing with `grid` .circle.monash-bg-white.monash-blue[2]
+
+.flex[
+.w-50[
+
+```r
+*grid.rect(x = 0.5,
+*         y = 0.5,
+          width = 0.25, 
+          height = 0.25, 
+          default.units = "npc",
+          just = c("left", "bottom"), 
+          gp = gpar(fill = "pink"),
+          vp = NULL)
+```
+
+]
+.w-50[
+&lt;img src="images/day1-session1/vp-rect2-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+
+]
+]
+
+---
+
+
+# Drawing with `grid` .circle.monash-bg-white.monash-blue[3]
+
+.flex[
+.w-50[
+
+```r
+grid.rect(x = 0.5, 
+          y = 0.5, 
+          width = 0.25, 
+          height = 0.25, 
+          default.units = "npc",
+*         just = c("center", "center"),
+          gp = gpar(fill = "pink"),
+          vp = NULL)
+```
+]
+.w-50[
+&lt;img src="images/day1-session1/vp-rect3-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+
+]
+]
+
+---
+
+# Drawing with `grid` .circle.monash-bg-white.monash-blue[4]
+
+.flex[
+.w-50[
+
+```r
+grid.rect(x = 0.5, 
+          y = 0.5, 
+*         width = 0.5,
+*         height = 0.5,
+          default.units = "npc",
+          just = c("center", "center"), 
+          gp = gpar(fill = "pink"),
+          vp = NULL)
+```
+]
+.w-50[
+&lt;img src="images/day1-session1/vp-rect4-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+
+]
+]
+
+---
+
+# Drawing with `grid` .circle.monash-bg-white.monash-blue[5]
+
+.flex[
+.w-50[
+
+```r
+grid.rect(x = 0.5, 
+          y = 0.5, 
+          width = 0.5, 
+          height = 0.5, 
+*         default.units = "in",
+          just = c("left", "bottom"), 
+          gp = gpar(fill = "pink"),
+          vp = NULL)
+```
+]
+.w-50[
+&lt;img src="images/day1-session1/vp-rect5-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+.center[
+This canvas is 5 inches high and 7 inches wide
+
+]
+
+]
+]
+
+---
+
+# Drawing with `grid` .circle.monash-bg-white.monash-blue[6]
+
+.flex[
+.w-50[
+
+```r
+*grid.rect(x = unit(0.5, "npc"),
+*         y = unit(0.5, "npc"),
+          width = 0.5, 
+          height = 0.5, 
+          default.units = "in", 
+          just = c("left", "bottom"), 
+          gp = gpar(fill = "pink"),
+          vp = NULL)
+```
+]
+.w-50[
+&lt;img src="images/day1-session1/vp-rect6-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+]]
+
+---
+
+# Drawing with `grid` .circle.monash-bg-white.monash-blue[7]
+
+.flex[
+.w-50[
+
+```r
+grid.circle(
+  x = 1:6,
+  y = 3,
+  r = 1:6/6,
+  default.units = "in", 
+  gp = gpar(fill = sample(colors(), 6)),
+  vp = NULL)
+```
+]
+.w-50[
+&lt;img src="images/day1-session1/vp-rect7-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+
+* Arguments can be vectorised
+* The Z-order is determined by the order of the input
+
+]]
+
+---
+
+class: transition animated slideInLeft
+
+# Viewport
+
+
+---
+
+# The root viewport
+
+* A **viewport** is a polygon (often rectangular) viewing region in computer graphics.
+* When `vp = NULL`, this refers to the root viewport, i.e. the canvas
+
+&lt;img src="images/day1-session1/vp-root2-1.png" width="504" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Viewport in `grid` .circle.monash-bg-white.monash-blue[1]
+
+.flex[
+.w-50[
+
+```r
+grid.circle(x = c(0.1, 0.9),
+            y = c(0.1, 0.9),
+            r = 0.2,
+            default.units = "npc", 
+            gp = gpar(fill = "pink"),
+            vp = NULL)
+```
+]
+.w-50[
+&lt;img src="images/day1-session1/vp1-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+
+Graphical output outside of the root Viewport are not visible.
+
+]]
+
+---
+
+# Viewport in `grid` .circle.monash-bg-white.monash-blue[2]
+
+.flex[
+.w-50[
+
+```r
+*vp1 &lt;- viewport(x = 0.1, y = 0.1,
+*       width = 0.5,
+*       height = 0.5,
+*       just = c("left", "bottom"))
+
+grid.circle(x = c(0.1, 0.9),
+            y = c(0.1, 0.9),
+            r = 0.2,
+            default.units = "npc", 
+            gp = gpar(fill = "pink"),
+*           vp = vp1)
+```
+]
+.w-50[
+&lt;img src="images/day1-session1/vp2-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+
+Graphical object is drawn relative to Viewport `vp1`.
+
+]]
+
+---
+
+count: false
+
+# Viewport in `grid` .circle.monash-bg-white.monash-blue[2]
+
+.flex[
+.w-50[
+
+```r
+*vp1 &lt;- viewport(x = 0.1, y = 0.1,
+*       width = 0.5,
+*       height = 0.5,
+*       just = c("left", "bottom"))
+
+grid.circle(x = c(0.1, 0.9),
+            y = c(0.1, 0.9),
+            r = 0.2,
+            default.units = "npc", 
+            gp = gpar(fill = "pink"),
+*           vp = vp1)
+```
+]
+.w-50[
+&lt;img src="images/day1-session1/vp3-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+
+Graphical object is drawn relative to Viewport `vp1`.
+
+]]
+
+---
+
+# Viewport in `grid` .circle.monash-bg-white.monash-blue[3]
+
+.flex[
+.w-50[
+
+```r
+vp2 &lt;- viewport(x = 0.5, y = 0.5, 
+        width = 0.5, 
+        height = 0.5,  
+        just = "center", 
+        angle = 30) 
+grid.rect(vp = vp2)
+```
+
+]
+.w-50[
+&lt;img src="images/day1-session1/vp4-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+
+]
+]
+
+---
+
+count: false
+
+# Viewport in `grid` .circle.monash-bg-white.monash-blue[3]
+
+.flex[
+.w-50[
+
+```r
+vp2 &lt;- viewport(x = 0.5, y = 0.5, 
+        width = 0.5, 
+        height = 0.5,  
+        just = "center", 
+        angle = 30) 
+grid.rect(vp = vp2)
+*pushViewport(vp2)
+```
+
+]
+.w-50[
+&lt;img src="images/day1-session1/vp5-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+
+* `pushViewport(vp)` changes all subsequent drawing context to the `viewport` object `vp`
+]
+]
+
+---
+
+count: false
+
+# Viewport in `grid` .circle.monash-bg-white.monash-blue[3]
+
+.flex[
+.w-50[
+
+```r
+vp2 &lt;- viewport(x = 0.5, y = 0.5, 
+        width = 0.5, 
+        height = 0.5,  
+        just = "center", 
+        angle = 30) 
+grid.rect(vp = vp2)
+*pushViewport(vp2)
+grid.rect(vp = vp2)
+```
+
+]
+.w-50[
+&lt;img src="images/day1-session1/vp6-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+* `pushViewport(vp)` changes all subsequent drawing context to the `viewport` object `vp`
+]
+]
+
+---
+
+count: false
+
+# Viewport in `grid` .circle.monash-bg-white.monash-blue[3]
+
+.flex[
+.w-50[
+
+```r
+vp2 &lt;- viewport(x = 0.5, y = 0.5, 
+        width = 0.5, 
+        height = 0.5,  
+        just = "center", 
+        angle = 30) 
+grid.rect(vp = vp2)
+*pushViewport(vp2)
+grid.rect(vp = vp2)
+*pushViewport(vp2)
+```
+
+]
+.w-50[
+&lt;img src="images/day1-session1/vp7-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+* `pushViewport(vp)` changes all subsequent drawing context to the `viewport` object `vp`
+]
+]
+
+---
+
+count: false
+
+# Viewport in `grid` .circle.monash-bg-white.monash-blue[3]
+
+.flex[
+.w-50[
+
+```r
+vp2 &lt;- viewport(x = 0.5, y = 0.5, 
+        width = 0.5, 
+        height = 0.5,  
+        just = "center", 
+        angle = 30) 
+grid.rect(vp = vp2)
+*pushViewport(vp2)
+grid.rect(vp = vp2)
+*pushViewport(vp2)
+grid.rect(vp = vp2)
+```
+
+]
+.w-50[
+&lt;img src="images/day1-session1/vp8-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+* `pushViewport(vp)` changes all subsequent drawing context to the `viewport` object `vp`
+]
+]
+
+---
+
+count: false
+
+# Viewport in `grid` .circle.monash-bg-white.monash-blue[3]
+
+.flex[
+.w-50[
+
+```r
+vp2 &lt;- viewport(x = 0.5, y = 0.5, 
+        width = 0.5, 
+        height = 0.5,  
+        just = "center", 
+        angle = 30) 
+grid.rect(vp = vp2)
+*pushViewport(vp2)
+grid.rect(vp = vp2)
+*pushViewport(vp2)
+grid.rect(vp = vp2)
+*popViewport()
+```
+
+]
+.w-50[
+&lt;img src="images/day1-session1/vp9-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+* `pushViewport(vp)` changes all subsequent drawing context to the `viewport` object `vp`
+* `popViewport()` removes current viewport and reverts to the previous drawing context
+]
+]
+
+---
+
+count: false
+
+# Viewport in `grid` .circle.monash-bg-white.monash-blue[3]
+
+.flex[
+.w-50[
+
+```r
+vp2 &lt;- viewport(x = 0.5, y = 0.5, 
+        width = 0.5, 
+        height = 0.5,  
+        just = "center", 
+        angle = 30, name = "vp-2") 
+grid.rect(vp = vp2)
+*pushViewport(vp2)
+grid.rect(vp = vp2)
+*pushViewport(vp2)
+grid.rect(vp = vp2)
+*popViewport()
+grid.text("Bottom-left corner", 
+          x = 0.025, y = 0.025, 
+          just = c("left", "bottom"))
+```
+
+]
+.w-50[
+&lt;img src="images/day1-session1/vp10-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+* `pushViewport(vp)` changes all subsequent drawing context to the `viewport` object `vp`
+* `popViewport()` removes current viewport and reverts to the previous drawing context
+
+]
+]
+
+---
+
+# Viewport in `grid` .circle.monash-bg-white.monash-blue[4]
+
+.flex[
+.w-50.f4[
+
+```r
+vp3 &lt;- viewport(x = 0.5, y = 0.5, 
+        width = 0.5, 
+        height = 0.5,  
+        just = "center", 
+        angle = 30, name = "vp-3") 
+grid.rect(vp = vp2)
+pushViewport(vp2) 
+grid.rect(vp = vp2)
+pushViewport(vp3)
+grid.rect(vp = vp2)
+*upViewport(n = 2)
+grid.text("Bottom-left corner", 
+          x = 0.025, y = 0.025, 
+          just = c("left", "bottom"))
+*downViewport("vp-3")
+grid.text("Bottom-left corner", 
+          x = 0.025, y = 0.025, 
+          just = c("left", "bottom"))
+```
+
+]
+.w-50[
+&lt;img src="images/day1-session1/vp11-1.png" width="504" class='ba' style="display: block; margin: auto;" /&gt;
+* `upViewport()` 
+* `downViewport()` 
+
+]
+]
+
+
+---
+
+
+
+
+class: transition 
+
+# Resources
+
+
+.f2[See Murrell (2019) "R Graphics" book for more about .monash-white[`grid`]]
+
+
+---
+
+class: exercise middle hide-slide-number
+
+
+&lt;i class="fas fa-users"&gt;&lt;/i&gt;
+
+# &lt;i class="fas fa-code"&gt;&lt;/i&gt; Open `day1-exercise-01.Rmd`
+
+&lt;center&gt;
+<div class="countdown clock" id="timer_61af3d7c" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">15</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+&lt;/center&gt;
+
+
+---
+
+
+
+class: font_smaller
+background-color: #e5e5e5
+
+# Session Information
+
+.overflow-scroll.h-80[
+
+
+```r
+devtools::session_info()
+```
+
+```
+## ─ Session info  🤗  💤  🇲🇩   ─────────────────────────────────────────────────
+##  hash: smiling face with open hands, zzz, flag: Moldova
+## 
+##  setting  value
+##  version  R version 4.1.2 (2021-11-01)
+##  os       macOS Catalina 10.15.7
+##  system   x86_64, darwin17.0
+##  ui       X11
+##  language (EN)
+##  collate  en_AU.UTF-8
+##  ctype    en_AU.UTF-8
+##  tz       Australia/Melbourne
+##  date     2021-12-07
+##  pandoc   2.14.0.3 @ /Applications/RStudio.app/Contents/MacOS/pandoc/ (via rmarkdown)
+## 
+## ─ Packages ───────────────────────────────────────────────────────────────────
+##  package     * version date (UTC) lib source
+##  bslib         0.3.1   2021-10-06 [1] CRAN (R 4.1.0)
+##  cachem        1.0.6   2021-08-19 [1] CRAN (R 4.1.0)
+##  callr         3.7.0   2021-04-20 [1] CRAN (R 4.1.0)
+##  cli           3.1.0   2021-10-27 [1] CRAN (R 4.1.0)
+##  colorspace    2.0-2   2021-06-24 [1] CRAN (R 4.1.0)
+##  countdown     0.3.5   2021-12-07 [1] Github (gadenbuie/countdown@a544fa4)
+##  crayon        1.4.2   2021-10-29 [1] CRAN (R 4.1.0)
+##  desc          1.4.0   2021-09-28 [1] CRAN (R 4.1.0)
+##  devtools      2.4.2   2021-06-07 [1] CRAN (R 4.1.0)
+##  digest        0.6.29  2021-12-01 [1] CRAN (R 4.1.0)
+##  ellipsis      0.3.2   2021-04-29 [1] CRAN (R 4.1.0)
+##  evaluate      0.14    2019-05-28 [1] CRAN (R 4.1.0)
+##  fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.1.0)
+##  fs            1.5.0   2020-07-31 [1] CRAN (R 4.1.0)
+##  glue          1.5.0   2021-11-07 [1] CRAN (R 4.1.0)
+##  highr         0.9     2021-04-16 [1] CRAN (R 4.1.0)
+##  htmltools     0.5.2   2021-08-25 [1] CRAN (R 4.1.0)
+##  httr          1.4.2   2020-07-20 [1] CRAN (R 4.1.0)
+##  jquerylib     0.1.4   2021-04-26 [1] CRAN (R 4.1.0)
+##  jsonlite      1.7.2   2020-12-09 [1] CRAN (R 4.1.0)
+##  kableExtra    1.3.4   2021-02-20 [1] CRAN (R 4.1.0)
+##  knitr         1.36    2021-09-29 [1] CRAN (R 4.1.0)
+##  lifecycle     1.0.1   2021-09-24 [1] CRAN (R 4.1.0)
+##  magrittr    * 2.0.1   2020-11-17 [1] CRAN (R 4.1.0)
+##  memoise       2.0.0   2021-01-26 [1] CRAN (R 4.1.0)
+##  munsell       0.5.0   2018-06-12 [1] CRAN (R 4.1.0)
+##  pkgbuild      1.2.0   2020-12-15 [1] CRAN (R 4.1.0)
+##  pkgload       1.2.3   2021-10-13 [1] CRAN (R 4.1.0)
+##  prettyunits   1.1.1   2020-01-24 [1] CRAN (R 4.1.0)
+##  processx      3.5.2   2021-04-30 [1] CRAN (R 4.1.0)
+##  ps            1.6.0   2021-02-28 [1] CRAN (R 4.1.0)
+##  purrr         0.3.4   2020-04-17 [1] CRAN (R 4.1.0)
+##  R6            2.5.1   2021-08-19 [1] CRAN (R 4.1.0)
+##  remotes       2.4.1   2021-09-29 [1] CRAN (R 4.1.0)
+##  rlang         0.4.12  2021-10-18 [1] CRAN (R 4.1.0)
+##  rmarkdown     2.11    2021-09-14 [1] CRAN (R 4.1.0)
+##  rprojroot     2.0.2   2020-11-15 [1] CRAN (R 4.1.0)
+##  rstudioapi    0.13    2020-11-12 [1] CRAN (R 4.1.0)
+##  rvest         1.0.2   2021-10-16 [1] CRAN (R 4.1.0)
+##  sass          0.4.0   2021-05-12 [1] CRAN (R 4.1.0)
+##  scales        1.1.1   2020-05-11 [1] CRAN (R 4.1.0)
+##  sessioninfo   1.2.1   2021-11-02 [1] CRAN (R 4.1.0)
+##  stringi       1.7.5   2021-10-04 [1] CRAN (R 4.1.0)
+##  stringr       1.4.0   2019-02-10 [1] CRAN (R 4.1.0)
+##  svglite       2.0.0   2021-02-20 [1] CRAN (R 4.1.0)
+##  systemfonts   1.0.3   2021-10-13 [1] CRAN (R 4.1.2)
+##  testthat      3.1.0   2021-10-04 [1] CRAN (R 4.1.0)
+##  usethis       2.1.3   2021-10-27 [1] CRAN (R 4.1.0)
+##  viridisLite   0.4.0   2021-04-13 [1] CRAN (R 4.1.0)
+##  webshot       0.5.2   2019-11-22 [1] CRAN (R 4.1.0)
+##  whisker       0.4     2019-08-28 [1] CRAN (R 4.1.0)
+##  withr         2.4.2   2021-04-18 [1] CRAN (R 4.1.0)
+##  xaringan      0.22    2021-06-23 [1] CRAN (R 4.1.0)
+##  xfun          0.28    2021-11-04 [1] CRAN (R 4.1.0)
+##  xml2          1.3.2   2020-04-23 [1] CRAN (R 4.1.0)
+##  yaml          2.2.1   2020-02-01 [1] CRAN (R 4.1.0)
+## 
+##  [1] /Library/Frameworks/R.framework/Versions/4.1/Resources/library
+## 
+## ──────────────────────────────────────────────────────────────────────────────
+```
+]
+
+
+These slides are licensed under &lt;br&gt;&lt;center&gt;&lt;a href="https://creativecommons.org/licenses/by-sa/3.0/au/"&gt;&lt;img src="images/cc.svg" style="height:2em;"/&gt;&lt;img src="images/by.svg" style="height:2em;"/&gt;&lt;img src="images/sa.svg" style="height:2em;"/&gt;&lt;/a&gt;&lt;/center&gt;
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLanguage": "r",
+"highlightLines": true,
+"highlightSpans": false,
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%/%total%",
+"navigation": {
+"scroll": false,
+"touch": true,
+"click": false
+},
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

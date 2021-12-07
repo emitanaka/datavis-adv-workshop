@@ -1,0 +1,121 @@
+---
+title: "Day 1 Exercise 1 Solution: Drawing with `grid`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  fig.align = "center"
+)
+```
+
+```{r pkgs}
+library(grid)
+```
+
+
+## Exercise 1.1: Bouncing balls
+
+* To see the canvas outline, I also include `grid.rect(gp = gpar(fill = "transparent"))`.
+
+```{r day1-exercise-01-01s, fig.height=2, fig.width = 2}
+grid.newpage()
+grid.rect(gp = gpar(fill = "transparent"))
+grid.circle(gp = gpar(fill = "grey", col = "blue"))
+
+grid.newpage()
+canvas <- rectGrob(gp = gpar(fill = "transparent"))
+ball1 <- circleGrob(gp = gpar(fill = "grey", col = "blue"))
+grid.draw(grobTree(canvas, ball1))
+
+grid.newpage()
+grid.rect(gp = gpar(fill = "transparent"))
+grid.circle(x = c(0.25, 0.7), r = c(0.25, 0.2), gp = gpar(lwd = 4, fill = c("red", "white")))
+
+grid.newpage()
+canvas <- rectGrob(gp = gpar(fill = "transparent"))
+balls2 <- circleGrob(x = c(0.25, 0.7), r = c(0.25, 0.2), gp = gpar(lwd = 4, fill = c("red", "white")))
+grid.draw(grobTree(canvas, balls2))
+```
+
+
+## Exercise 1.2: Sport fields
+
+* Draw a European soccer field layout
+
+```{r day1-exercise-01-02As, fig.height=2, fig.width = 4}
+gpfield <- gpar(fill = "transparent", lwd = 3, col = "white")
+grid.newpage()
+grid.rect(gp = gpar(fill = "limegreen"))
+grid.rect(width = 0.9, height = 0.9, gp = gpfield)
+grid.polyline(x = c(0.5, 0.5), y = c(0.05, 0.95), gp = gpfield)
+grid.circle(r = 0.13, gp = gpfield)
+grid.rect(x = 0.05, y = 0.5, width = c(0.07, 0.14), height = c(0.3, 0.5), gp = gpfield, 
+          just = c("left", "center"))
+grid.rect(x = 0.95, y = 0.5, width = c(0.07, 0.14), height = c(0.3, 0.5), gp = gpfield, 
+          just = c("right", "center"))
+
+# or as a gTree
+
+field <- rectGrob(gp = gpar(fill = "limegreen"))
+exteriorBorder <- rectGrob(width = 0.9, height = 0.9, gp = gpfield)
+leftGoal <- rectGrob(x = 0.05, y = 0.5, width = c(0.07, 0.14), height = c(0.3, 0.5), gp = gpfield, 
+          just = c("left", "center"))
+rightGoal <- rectGrob(x = 0.95, y = 0.5, width = c(0.07, 0.14), height = c(0.3, 0.5), gp = gpfield, 
+          just = c("right", "center"))
+centerLine <- polylineGrob(x = c(0.5, 0.5), y = c(0.05, 0.95), gp = gpfield)
+center <- circleGrob(r = 0.13, gp = gpfield)
+soccerField <- gTree(children = gList(field,
+                                      exteriorBorder,
+                                      leftGoal,
+                                      rightGoal,
+                                      centerLine,
+                                      center))
+grid.newpage()
+grid.draw(soccerField)
+```
+
+* Draw a tennis court
+
+```{r day1-exercise-01-02Bs, fig.height=2, fig.width = 4}
+grid.newpage()
+grid.rect(gp = gpar(fill = "limegreen"))
+grid.rect(width = 0.9, height = 0.9, gp = gpfield)
+grid.rect(x = 0.05, y = 0.5, width = 0.2, height = 0.7,
+          just = c("left", "center"),
+          gp = gpfield)
+grid.rect(x = 0.95, y = 0.5, width = 0.2, height = 0.7,
+          just = c("right", "center"),
+          gp = gpfield)
+grid.rect(x = 0.25, y = c(0.5, 0.85), width = 0.5, height = 0.35,
+          just = c("left", "top"),
+          gp = gpfield)
+
+# or as a gTree
+grid.newpage()
+court <- rectGrob(gp = gpar(fill = "limegreen"))
+border <- rectGrob(width = 0.9, height = 0.9, gp = gpfield)
+leftArea <- rectGrob(x = 0.05, y = 0.5, width = 0.2, height = 0.7,
+                     just = c("left", "center"),
+                     gp = gpfield)
+rightArea <- rectGrob(x = 0.95, y = 0.5, width = 0.2, height = 0.7,
+                      just = c("right", "center"),
+                      gp = gpfield)
+middleAreas <- rectGrob(x = 0.25, y = c(0.5, 0.85), width = 0.5, height = 0.35,
+                      just = c("left", "top"),
+                      gp = gpfield)
+
+tennisCourt <- gTree(children = gList(court,
+                                      border,
+                                      leftArea,
+                                      rightArea,
+                                      middleAreas))
+
+grid.newpage()
+grid.draw(tennisCourt)
+```
+

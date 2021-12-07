@@ -1,0 +1,57 @@
+class: monash-bg-blue center middle hide-slide-number 
+
+
+
+<div class="bg-black white"  style="width:45%;right:0;bottom:0;padding-left:5px;border: solid 4px white;margin: auto;">
+<i class="fas fa-exclamation-circle"></i> These slides are viewed best by Chrome and occasionally need to be refreshed if elements did not load properly. See here for <a href=`r fs::path_ext_set(current_file, 'pdf')`>PDF <i class="fas fa-file-pdf"></i></a>. 
+</div>
+
+.white[Push the **right arrow key** to see the next slide.]
+
+
+
+---
+
+count: false
+background-image: url(`r rmarkdown::metadata$titleslide_bgimg`)
+background-size: cover
+class: hide-slide-number title-slide
+
+
+<div class="grid-row" style="grid: 1fr / 2fr;">
+
+.item.center[
+
+# <span style="text-shadow: 2px 2px 30px white;">`r rmarkdown::metadata$title`</span>
+
+<!-- ## <span style="color:`r rmarkdown::metadata$color_theme`;text-shadow: 2px 2px 30px black;">`r knitr::asis_output(rmarkdown::metadata$subtitle)`</span> -->
+
+]
+
+.center.shade_black.animated.bounceInUp.slower[
+<br><br>
+## `r rmarkdown::metadata$subtitle`
+
+<br>
+
+Presented by `r rmarkdown::metadata$author`
+
+Department of Econometrics and Business Statistics
+
+<img src="images/monash-one-line-reversed.png" style="width:500px"><br>
+`r anicon::faa("envelope", animate="float")`  `r rmarkdown::metadata$email`
+`r anicon::faa("twitter", animate="float", speed="fast")`  @visnut
+
+.bottom_abs.width100.bg-black[
+`r rmarkdown::metadata$date`
+]
+
+
+]
+
+</div>
+
+
+
+
+

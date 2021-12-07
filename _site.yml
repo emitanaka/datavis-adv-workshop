@@ -1,0 +1,22 @@
+name: "Advanced Data Visualisation with R"
+output_dir: "docs"
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
+    css: assets/site-styles.css
+navbar:
+  title: "Advanced Data Visualisation with R"
+  left:
+    - text: "Home"
+      icon: fa-home
+      href: index.html
+    - text: "Day 1"
+      href: day1.html
+    #- text: "Day 2"
+    #  href: day2.html
+    - text: "Help!"
+      href: help.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/emitanaka/datavis-adv-workshop

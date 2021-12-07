@@ -1,0 +1,547 @@
+---
+title: "Advanced Data Visualisation with R"
+subtitle: "Writing `ggplot2` extensions"
+author: "Emi Tanaka"
+email: "emi.tanaka@monash.edu"
+date: "8th Dec 2021 @ Statistical Society of Australia Canberra Branch | Zoom"
+length: "360 minutes"
+color_theme: "yellow"
+titleslide_bgimg: "images/bg4.jpg"
+output:
+  xaringan::moon_reader:
+    css:
+      - ninjutsu 
+      - "assets/font-awesome-all.css"
+      - "assets/tachyons-addon.css"
+      - "assets/animate.css"
+      - "assets/fira-code.css"
+      - "assets/boxes.css"
+      - "assets/styles.css"
+      - "assets/monash-brand.css"
+      - "assets/monash-fonts.css"
+      - "assets/slide-types.css"
+      - "assets/table.css"
+      - "assets/custom.css"
+    self_contained: false 
+    seal: false 
+    chakra: 'libs/remark-latest.min.js'
+    lib_dir: libs
+    #mathjax: "assets/mathjax-local/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    nature:
+      highlightStyle: github
+      highlightLanguage: r 
+      highlightLines: true
+      highlightSpans: false 
+      countIncrementalSlides: false
+      slideNumberFormat: '%current%/%total%'
+      navigation:
+        scroll: false 
+        touch: true
+        click: false
+      ratio: '16:9'
+---
+
+
+```{r, include = FALSE}
+current_file <- knitr::current_input()
+figpath <- paste0("images/", gsub("[.]Rmd", "", current_file), "/")
+knitr::opts_chunk$set(fig.align = "center",
+                      fig.path = figpath,
+                      fig.retina = 2,
+                      cache = FALSE,
+                      cache.path = "cache/day1-session3/")
+library(ggplot2)
+theme_set(theme(text = element_text(size = 18)))
+```
+```{r titleslide, child="assets/titleslide.Rmd"}
+```
+
+---
+
+# Dissecting the `ggplot` object 
+
+
+```{r}
+library(ggplot2)
+g <- ggplot(cars, aes(speed, dist)) +
+  geom_point()  
+```
+
+.flex.mt3[
+.w-35.pr3[
+```{r ggcars, fig.height = 5, fig.width = 5}
+g
+```
+
+]
+.w-60[
+```{r str-chickwts, eval = FALSE}
+str(g)
+```
+.scroll-sign.f5[
+.overflow-scroll.h5[
+```{r str-chickwts, echo = FALSE}
+```
+]]
+{{content}}
+]
+]
+
+--
+
+* Notice that a layer, `geom`, `position`, `stat`, `scales`, `coordinates` and `facet` are **`ggproto` objects**
+
+
+---
+
+
+class: transition 
+
+# `ggproto`
+
+---
+
+
+# `ggproto` basics
+
+* `ggplot2` makes heavy use of **prototype-based programming** 
+--
+
+* `ggproto` is a custom build class system made specically for `ggplot`
+--
+
+* The system is similar to `R6Class` in the `R6` package that allow inheritance and method access from parent classes
+--
+
+
+
+.flex[
+.w-50.pr3[
+.f5[
+```{r}
+OzCovidTracker <- ggproto("OzCovidTracker", NULL, 
+                cases = 0,
+                location = "Australia",
+                last_update = NA,
+                add = function(self, cases = 0) {
+                  self$cases <- self$cases + cases
+                  self$last_update <- Sys.Date()
+                },
+                reset = function(self) {
+                  self$cases <- 0
+                })
+```
+
+]
+]
+.w-50.f5[
+{{content}}
+]
+]
+
+--
+
+```{r}
+OzCovidTracker
+```
+
+{{content}}
+
+--
+
+```{r}
+OzCovidTracker$add(cases = 219120)
+```
+{{content}}
+
+--
+
+```{r}
+OzCovidTracker$cases
+```
+{{content}}
+
+--
+
+```{r}
+OzCovidTracker$add(cases = 80)
+```
+{{content}}
+
+--
+
+```{r}
+OzCovidTracker$cases
+```
+
+---
+
+# `ggproto` inheritance
+
+```{r}
+VicCovidTracker <- ggproto("VicCovidTracker", OzCovidTracker, location = "Victoria")
+```
+
+--
+
+```{r}
+VicCovidTracker$reset()
+VicCovidTracker
+```
+
+--
+
+```{r}
+VicCovidTracker$add(128849)
+```
+
+--
+
+```{r}
+VicCovidTracker$cases
+```
+
+---
+
+# Creating a new `ggproto` object
+
+
+* You should not be creating a new `ggroto` object from scratch
+--
+
+* You should inherit existing `ggproto` objects as outlined below:
+
+
+New `ggproto` | Parent `ggproto`
+--- | ---
+`geom` | `ggplot2::Geom`
+`position` | `ggplot2::Position`
+`stat` | `ggplot2::Stat`
+`scales` | `ggplot2::Scale`
+`coordinates` | `ggplot2::Coord`
+`facet` | `ggplot2::Facet`
+
+--
+
+* The convention for class names is to prefix with the parent (or ancestor) `ggproto` class name and use upper camel case, e.g. `GeomPoint`.
+
+
+
+
+---
+
+
+class: transition 
+
+
+# `Stat`
+
+---
+
+# Example: fit a normal distribution
+
+
+🎯 Create a new layer called `stat_dist_normal()` which fits a normal density curve
+
+.flex[
+.w-50.f5[
+```{r norm-dist, eval = FALSE}
+# your data
+df <- data.frame(x = rnorm(400, 10, 2))
+
+# normal fit
+x <- seq(min(df$x), max(df$x), 
+         length.out = 1000)
+fit <- data.frame(x = x,
+                  y = dnorm(x, mean(df$x), sd(df$x)))
+
+# plot
+ggplot(df, aes(x)) + 
+  geom_histogram(aes(y = stat(density)), bins = 30) + 
+  geom_line(data = fit, color = "red", size = 2, 
+            aes(x, y))
+```
+
+]
+.w-50[
+```{r norm-dist, fig.height = 5, echo = FALSE}
+```
+]
+]
+
+
+---
+
+# `Stat` `ggproto`
+
+
+.flex[
+.w-35.pr3[
+.f5[
+```{r}
+Stat
+```
+]
+]
+.w-65.f5[
+{{content}}
+]
+]
+
+--
+
+```{r}
+StatDistNormal <- ggproto("StatDistNormal", Stat,
+                          compute_group = function(data, scales) {
+                            x <- seq(min(data$x), max(data$x), length.out = 1000)
+                            y <- dnorm(x, mean(data$x), sd(data$x))
+                            data.frame(x = x, y = y)
+                          },
+                          required_aes = "x")
+
+stat_dist_normal <- function(mapping = NULL, data = NULL, geom = "line",
+                    position = "identity", na.rm = FALSE, show.legend = NA, 
+                    inherit.aes = TRUE, ...) {
+  layer(
+    stat = StatDistNormal, data = data, geom = "line", position = "identity", 
+    show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+    )
+}
+```
+
+---
+
+# `stat_dist_normal`
+
+.flex[
+.w-50.f5.br[
+```{r stat-dist-normal, fig.width = 5, fig.height = 5}
+ggplot(df, aes(x)) + 
+  geom_histogram(aes(y = stat(density)), bins = 30) + 
+  stat_dist_normal(color = "red", size = 2) 
+```
+]
+.w-50.f5.pl3[
+{{content}}
+]
+]
+
+--
+
+Works for facetting as well!
+
+```{r stat-dist-normal-group, fig.width = 7, fig.height = 5}
+# make some artificial group
+df$group <- sample(c(0, 1), replace = TRUE, size = nrow(df))
+ggplot(df, aes(x)) + 
+  geom_histogram(aes(y = stat(density)), bins = 30) + 
+  stat_dist_normal(color = "red", size = 2) +
+  facet_wrap(~group)
+```
+
+
+---
+
+class: transition 
+
+
+# `Geom`
+
+
+---
+
+# Example: tic-tac-toe
+
+🎯 Create a new layer called `geom_tictactoe()` which draws a tic-tac-toe like board
+
+```{r, fig.height = 4, fig.width = 4}
+game <- expand.grid(col = 1:3, row = 1:3)
+game$move <- sample(rep(c("Alice", "Bob"), c(4, 5)))
+```
+
+.flex.mt3[
+.w-30.pr3[
+```{r}
+game
+```
+
+]
+.w-70.f4[
+```{r tic-tac-toe, fig.height = 3.5, fig.width = 3.5}
+ggplot(game, aes(col, row)) + 
+  geom_tile(fill = "white", color = "black") +
+  geom_text(aes(label = ifelse(move=="Alice", "X", "O")), 
+            size = 20) +
+  theme_minimal()
+```
+]
+]
+
+
+---
+
+# `Geom` `ggproto`
+
+
+.flex[
+.w-35.pr3[
+.f5[
+```{r}
+Geom
+```
+]
+]
+.w-65.f5[
+{{content}}
+]
+]
+
+--
+
+```{r}
+GeomTile
+```
+
+---
+
+# `GeomTicTacToe`
+
+.f5[
+```{r}
+GeomTicTacToe <- ggproto("GeomTicTacToe", GeomTile,
+                         draw_panel = function(data, panel_params, coord) {
+                           coords <- coord$transform(data, panel_params)
+                           width <- coords$xmax - coords$xmin
+                           height <- coords$ymax - coords$ymin
+                           tiles <- grid::rectGrob(coords$xmin, coords$ymax, 
+                                                   width = width, 
+                                                   height = height, 
+                                                   default.units = "native", 
+                                                   just = c("left", "top"), 
+                                                   gp = grid::gpar(col = coords$colour, 
+                                                                   fill = alpha(coords$fill, coords$alpha), 
+                                                                   lwd = coords$size * .pt, lty = coords$linetype, 
+                                                                   linejoin = "mitre", lineend = "square"))
+                           if(length(unique(coords$label)) != 2) {
+                             stop("There should be only two players in tic-tac-toe")
+                           }
+                           fontsize <- min(c(height, width))
+                           fontsize <- grid::convertUnit(grid::unit(fontsize, "snpc"), "pt")
+                           moves <- grid::textGrob(label = factor(coords$label, labels = c("X", "O")),
+                                                   x = coords$x, y = coords$y, 
+                                                   gp = grid::gpar(fontsize = fontsize))
+                           ggplot2:::ggname("geom_tictactoe", grid::gTree(children = grid::gList(tiles, moves)))
+                         },
+                         required_aes = c("x", "y", "label"))
+
+```
+
+]
+
+---
+
+# `geom_tictactoe`
+
+
+```{r}
+geom_tictactoe <- function(mapping = NULL, data = NULL, stat = "identity", position = "identity", 
+    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, color = "black", fill = "white")  {
+      list( #<<
+        layer(data = data, mapping = mapping, stat = stat, geom = GeomTicTacToe, 
+              position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+              params = list(na.rm = na.rm, color = color, fill = fill, ...)),
+        theme_minimal()) #<<
+    }
+
+```
+
+
+--
+
+.flex[
+.w-50[
+
+```{r game-tictactoe, eval = FALSE}
+ggplot(game, aes(col, row, 
+                 label = move)) +
+  geom_tictactoe() 
+```
+]
+.w-50[
+```{r game-tictactoe, fig.height = 4, fig.width = 4, echo = FALSE}
+```
+]
+]
+
+
+---
+
+# More than the tic-tac-toe game
+
+```{r}
+checklist <- expand.grid(person = c("Alex", "Sandy"), 
+                         task = c("Shop", "Work", "Exercise", "Cook"))
+checklist$done <- c(TRUE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE)
+```
+
+.flex.mt3[
+.w-50.pr3[
+```{r}
+checklist
+```
+
+]
+.w-50[
+```{r gg-checklist, fig.height = 4}
+ggplot(checklist, 
+       aes(task, person, label = done)) +
+  geom_tictactoe()
+```
+]
+]
+
+
+
+
+
+
+
+
+
+
+---
+
+class: transition
+
+# Resources
+
+<br>
+
+.f2[For more see the ["Extending ggplot2" vignette](https://cran.r-project.org/web/packages/ggplot2/vignettes/extending-ggplot2.html)]
+
+
+.f2[Check out also the 3rd edition of the ggplot2 book<br>https://ggplot2-book.org/extensions.html]
+
+.f2[And more also in documentation at .monash-white[`?ggplot2::Layout`]]
+
+
+
+---
+
+
+class: exercise middle hide-slide-number
+
+
+<i class="fas fa-users"></i>
+
+# <i class="fas fa-code"></i> Open `day1-exercise-03.Rmd`
+
+<center>
+`r countdown::countdown(15, class = "clock")`
+</center>
+
+---
+
+```{r endslide, child="assets/endslide.Rmd"}
+```
