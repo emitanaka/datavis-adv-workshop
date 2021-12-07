@@ -18,4 +18,4 @@ date: "6th December 2021"
 
 * Emi Tanaka: emi.tanaka@monash.edu  
 * Di Cook: dicook@monash.edu
-* Danyang Dai: mitch.ohara-wild@monash.edu
+* Mitchell O'Hara-Wild: mitch.ohara-wild@monash.edu
