@@ -1,0 +1,29 @@
+---
+title: "Day 1 Exercise 1: Drawing with `grid`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+
+
+```{r pkgs, message = FALSE, warning = FALSE}
+library(grid)
+```
+
+
+### Exercise 1.1: Bouncing balls
+
+
+Draw using `grid.circle` and/or `circleGrob`:
+
+* A grey circle with blue border with the center in the middle of the canvas with the edge touching the border of the canvas
+* Two circles on the same canvas: one with diameter of half the page with red color and thick black border that touches the edge of the canvas border and another white circle with radius 20% of the canvas width and thick black border that touches the edge of the other circle
+
+
+### Exercise 1.2: Sport fields
+
+
+* Draw a European soccer field layout using `grid`
+* Draw a tennis court layout

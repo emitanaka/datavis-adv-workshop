@@ -1,0 +1,612 @@
+---
+title: "Advanced data visualization with R <br> Workshop Day 2"
+subtitle: "Lesson 2: Digging deeper into reactive elements in shiny"
+author: "Di Cook"
+email: "dicook@monash.edu"
+date: "8-9th Dec 2021 @ Statistical Society of Australia | Zoom"
+length: "360 minutes"
+color_theme: "yellow"
+pdflink: "day2session2.pdf"
+titleslide_bgimg: "images/d2bg3.jpg"
+output:
+  xaringan::moon_reader:
+    css:
+      - ninjutsu 
+      - "assets/animate.css"
+      - "assets/styles2.css"
+      - "assets/fira-code.css"
+      - "assets/monash-brand.css"
+      - "assets/boxes.css"
+      - "assets/custom.css"
+      - "assets/tachyons-addon.css"
+      - "assets/scroll.css"
+    self_contained: false 
+    seal: false 
+    chakra: 'libs/remark-latest.min.js'
+    lib_dir: libs
+    mathjax: "assets/mathjax-local/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    nature:
+      highlightStyle: github
+      highlightLanguage: r 
+      highlightLines: true
+      highlightSpans: false 
+      countIncrementalSlides: false
+      slideNumberFormat: '%current%/%total%'
+      navigation:
+        scroll: false 
+        touch: true
+        click: false
+      ratio: '16:9'
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+current_file <- knitr::current_input()
+```
+```{r titleslide, child="assets/titleslide2.Rmd"}
+```
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  fig.path = "images/day2-session1/",
+  fig.width = 6,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = "100%",
+  fig.retina = 3,
+  warning = FALSE,
+  message = FALSE,
+  cache = FALSE
+)
+library(tidyverse)
+library(palmerpenguins)
+library(plotly)
+library(gganimate)
+library(DT)
+library(leaflet)
+library(crosstalk)
+filter <- dplyr::filter
+select <- dplyr::select
+```
+
+---
+class: transition middle
+# Outline
+
+Animation<br>
+Linking between plots<br>
+Using a `key` variable to link between plots
+
+---
+class: transition middle
+
+# Animation
+
+
+---
+
+.pull-left[
+.monash-orange2[Animation] allows for controlled changes in a plot. It can provide more information to be displayed than is possible within a single plot. It can also .monash-orange2[draw attention] to specific parts of the plot. 
+
+Human perception is fleeting, though, and prone to .monash-orange2[forgetting] what was just displayed.  Keeping some elements persistent, possibly faint, or light coloured, can be useful for perceiving patterns of change.
+
+Think about what part of a plot would lend itself to animation, eg a time variable, or possibly a categorical variable.
+]
+
+.pull-right[
+Primary tools: `plotly`, `gganimate`
+
+<br><br>
+```{r eval=FALSE}
+# Schema for animation
+ggplot %>%
+  animation %>%
+  options (transition, 
+           speed, 
+           fade)
+```
+
+]
+---
+# ABS and Election data 
+
+```{r absdata, echo=FALSE, eval=FALSE}
+library(eechidna)
+data(abs2001)
+data(abs2004)
+data(abs2006)
+data(abs2007)
+data(abs2010)
+data(abs2011)
+data(abs2013)
+data(abs2016)
+data(abs2019)
+abs2001 <- abs2001 %>% 
+  mutate(year = 2001) %>%
+  select(year, UniqueID, State, Mortgage, Owned, Renting, Unemployed)
+abs2004 <- abs2004 %>% 
+  mutate(year = 2004) %>%
+  select(year, UniqueID, Mortgage, Owned, Renting, Unemployed) %>%
+  left_join(select(abs2001, UniqueID, State)) %>%
+  select(year, UniqueID, State, Mortgage, Owned, Renting, Unemployed)
+abs2006 <- abs2006 %>% 
+  mutate(year = 2006) %>%
+  select(year, UniqueID, Mortgage, Owned, Renting, Unemployed) %>%
+  left_join(select(abs2001, UniqueID, State)) %>%
+  select(year, UniqueID, State, Mortgage, Owned, Renting, Unemployed)
+abs2007 <- abs2007 %>% 
+  mutate(year = 2007) %>%
+  select(year, UniqueID, Mortgage, Owned, Renting, Unemployed) %>%
+  left_join(select(abs2001, UniqueID, State)) %>%
+  select(year, UniqueID, State, Mortgage, Owned, Renting, Unemployed)
+abs2010 <- abs2010 %>% 
+  mutate(year = 2010) %>%
+  select(year, UniqueID, Mortgage, Owned, Renting, Unemployed) %>%
+  left_join(select(abs2001, UniqueID, State)) %>%
+  select(year, UniqueID, State, Mortgage, Owned, Renting, Unemployed)
+abs2011 <- abs2011 %>% 
+  mutate(year = 2011) %>%
+  select(year, UniqueID, Mortgage, Owned, Renting, Unemployed, Unemployed) %>%
+  left_join(select(abs2001, UniqueID, State)) %>%
+  select(year, UniqueID, State, Mortgage, Owned, Renting, Unemployed, Unemployed)
+abs2013 <- abs2013 %>% 
+  mutate(year = 2013) %>%
+  select(year, UniqueID, Mortgage, Owned, Renting, Unemployed, Unemployed) %>%
+  left_join(select(abs2001, UniqueID, State)) %>%
+  select(year, UniqueID, State, Mortgage, Owned, Renting, Unemployed, Unemployed)
+abs2016 <- abs2016 %>% 
+  mutate(year = 2016) %>%
+  select(year, UniqueID, Mortgage, Owned, Renting, Unemployed, Unemployed) %>%
+  left_join(select(abs2001, UniqueID, State)) %>%
+  select(year, UniqueID, State, Mortgage, Owned, Renting, Unemployed)
+abs2019 <- abs2019 %>% 
+  mutate(year = 2019) %>%
+  select(year, UniqueID, Mortgage, Owned, Renting, Unemployed) %>%
+  left_join(select(abs2001, UniqueID, State)) %>%
+  select(year, UniqueID, State, Mortgage, Owned, Renting, Unemployed)
+abs <- bind_rows(abs2001,
+                 abs2004,
+                 abs2006,
+                 abs2007,
+                 abs2010,
+                 abs2011,
+                 abs2013,
+                 abs2016,
+                 abs2019) %>%
+  drop_na() # Electorate changes each year, and State var missing
+save(abs, file=here::here("data/abs.rda"))
+```
+
+.font_small[
+```{r echo=FALSE}
+load(here::here("data/abs.rda"))
+abs %>% 
+  DT::datatable(width=1150, height=100) %>%
+  DT::formatRound(columns=c('Mortgage', 'Owned', 'Renting', 'Unemployed'), digits=2)
+```
+]
+
+
+<div class="tag center animated rubberBand" style="position:absolute;top:2%;left:12%;transform:rotate(-3deg);">
+demo data for animation
+</div>
+
+.footnote[From the eechidna package, https://github.com/jforbes14/eechidna/]
+---
+# Animation with plotly
+
+
+.left-code[
+.font_small[
+```{r abs_anim, results='hide', fig.show='hide'}
+abs_p <- ggplot(abs, aes(
+    x=Mortgage, 
+    y=Owned, 
+    colour=State)) + 
+  geom_point(aes(frame=year, #<<
+                 ids=UniqueID)) + #<<
+  scale_colour_brewer("", 
+     palette = "Dark2")
+ggplotly(abs_p) #<<
+```
+]]
+
+.right-plot[
+
+```{r ref.label = "abs_anim", echo=FALSE, fig.width=6, fig.height=6, out.width="100%"}
+```
+]
+
+---
+# Animation with plotly
+
+
+.left-code[
+.font_small[
+```{r abs_anim2, results='hide', fig.show='hide'}
+abs_p <- ggplot(abs, aes(
+    x=Mortgage, 
+    y=Owned, 
+    colour=State)) + 
+  geom_point(aes(frame=year, 
+                 ids=UniqueID)) + 
+  scale_colour_brewer("", 
+     palette = "Dark2")
+ggplotly(abs_p) %>%
+  animation_opts(transition=0) #<<
+```
+]]
+
+.right-plot[
+
+```{r ref.label = "abs_anim2", echo=FALSE, fig.width=6, fig.height=6, out.width="100%"}
+```
+]
+
+---
+# Animation with plotly
+
+
+.left-code[
+.font_small[
+```{r abs_anim3, results='hide', fig.show='hide'}
+abs_p <- ggplot(abs, aes(
+    x=Mortgage, 
+    y=Owned, 
+    colour=State)) + 
+  geom_point(aes(frame=year, 
+                 ids=UniqueID)) + 
+  scale_colour_brewer("", 
+     palette = "Dark2")
+ggplotly(abs_p) %>%
+  animation_opts(frame=1000, #<<
+                 transition=950, #<<
+                 easing="cubic") #<<
+```
+]]
+
+.right-plot[
+
+```{r ref.label = "abs_anim3", echo=FALSE, fig.width=6, fig.height=6, out.width="100%"}
+```
+]
+
+---
+# Animation with plotly
+
+
+.left-code[
+.font_small[
+```{r abs_anim4, results='hide', fig.show='hide'}
+abs_p2 <- ggplot(abs, aes(
+    x=Mortgage, 
+    y=Owned, 
+    colour=State)) + 
+  geom_point(aes(frame=year)) + #<<
+  scale_colour_brewer("", 
+     palette = "Dark2")
+ggplotly(abs_p2) %>%
+  animation_opts(frame=1000, 
+                 transition=950) 
+```
+
+]
+
+The `ids` match up the points from one frame to another. If they aren't set the transition can look chaotic. 
+
+]
+
+.right-plot[
+
+```{r ref.label = "abs_anim4", echo=FALSE, fig.width=6, fig.height=6, out.width="100%"}
+```
+]
+
+---
+# Animation with plotly
+
+
+.left-code[
+.font_small[
+```{r abs_anim5, results='hide', fig.show='hide'}
+abs_p <- ggplot(abs, aes(
+    x=Mortgage, 
+    y=Owned, 
+    colour=State)) + 
+  geom_point(aes(frame=year, 
+                 ids=UniqueID)) + 
+  scale_colour_brewer("", 
+     palette = "Dark2")
+ggplotly(abs_p) %>%
+  animation_slider(hide=TRUE) #<<
+```
+]]
+
+.right-plot[
+
+```{r ref.label = "abs_anim5", echo=FALSE, fig.width=6, fig.height=6, out.width="100%"}
+```
+]
+
+---
+# Saving your animation
+
+.left-code[
+.font_small[
+```{r}
+library(htmlwidgets)
+abs_ply <- ggplotly(abs_p, 
+                    width=500, 
+                    height=500) %>%
+  animation_slider(hide=TRUE) 
+saveWidget(abs_ply, "abs_ply.html", #<<
+           selfcontained = F) #<<
+```
+]
+
+<br><br>
+To embed it in the html document:
+
+`<iframe src="images/abs_ply.html" width="100%" height="500" </iframe>`
+
+]
+
+.right-plot[
+
+<iframe src="images/abs_ply.html" width="100%" height="500" </iframe>
+]
+---
+# Animation with gganimate
+
+<br><br>
+The `gganimate` package is recommended for more control of an animation. There are more choices for different transitions, easing, traces from previous position. 
+
+<br>
+Construction follows the same as for `plotly`: generate your ggplot, specify the animation, add options. 
+
+---
+class: transition middle
+
+# Linking between plots
+
+---
+# Using crosstalk to link information between plots
+
+Crosstalk extends htmlwidgets with a set of classes, functions, and conventions for implementing cross-widget interactions (currently, .monash-orange2[linked brushing] and .monash-orange2[filtering]).
+
+.pull-left[
+.font_small[
+```{r crosstalk-example, results='hide', fig.show='hide'}
+# Wrap data frame in SharedData
+sd <- SharedData$new(
+  quakes[sample(nrow(quakes), 
+                100),]) #<<
+
+# Use SharedData like a dataframe with Crosstalk-enabled widgets
+bscols(
+  leaflet(sd) %>% 
+    addTiles() %>% 
+    addMarkers(),
+  datatable(sd, class="compact", 
+            width="200"))
+```
+]]
+
+.pull-right[
+
+.font_small[
+```{r ref.label="crosstalk-example", out.width="100%", echo=FALSE}
+```
+]
+]
+
+---
+# Mapping out the data analysis: ABS
+
+.font_small[
+```{r echo=FALSE}
+abs %>% 
+  DT::datatable(width=1150, height=100) %>%
+  DT::formatRound(columns=c('Mortgage', 'Owned', 'Renting', 'Unemployed'), digits=2)
+```
+]
+
+---
+# Mapping out the data analysis: ABS
+
+<br>
+<br>
+Think about the questions that might be answered with the data
+
+- Is the percentage of home ownership changing over the time period?
+- What is the relationship between home ownership and having a mortgage?
+- Is home ownership lower where there is higher unemployment?
+- Is there a difference across states in percentage of renters?
+
+---
+# Trends over time
+
+.left-code[
+.font_small[
+```{r abs-temporal, results='hide', fig.show='hide'}
+abs_long <- abs %>%
+  pivot_longer("Mortgage":"Unemployed", 
+               names_to ="Statistic", 
+               values_to = "Percentage")
+ggplot(abs_long, aes(x=year, 
+                     y=Percentage)) + 
+  geom_line(aes(group=UniqueID), 
+            alpha=0.5) +
+  facet_wrap(~Statistic, 
+             scales="free_y")
+```
+]]
+
+.right-plot[
+
+```{r ref.label="abs-temporal", echo=FALSE, fig.height=6, fig.width=6}
+```
+]
+---
+# Trends over time and linking
+
+.left-code[
+.font_small[
+```{r abs-linking, results='hide', fig.show='hide'}
+abs_key <- highlight_key(abs_long, #<<
+                         ~UniqueID) #<<
+
+abs_p2 <- ggplot(abs_key, #<< 
+                 aes(x=year,
+                     y=Percentage)) + 
+  geom_line(aes(group=UniqueID), 
+            alpha=0.5) +
+  facet_wrap(~Statistic, 
+             scales="free_y")
+
+abs_gg2 <- ggplotly(abs_p2, 
+                    height = 600, 
+                    width = 500) 
+
+highlight(abs_gg2) #<<
+```
+]
+
+<div align="right">
+`r anicon::nia("Click on a line", animate="bounce", anitype="hover", colour="#D93F00")`
+</div>
+]
+
+.right-plot[
+```{r ref.label="abs-linking", echo=FALSE}
+```
+
+]
+---
+# Linking control
+
+`highlight_key()` is an implementation of `crosstalk::SharedData()`
+
+`highlight()` controls the options for selection. 
+
+---
+# Trends over time and linking
+
+.left-code[
+.font_small[
+```{r abs-linking2, results='hide', fig.show='hide'}
+abs_key2<- highlight_key(abs_long, 
+                         ~State) #<<
+
+abs_p3 <- ggplot(abs_key2, 
+                 aes(x=year, 
+                     y=Percentage, 
+                     text=State)) + #<<
+  geom_line(aes(group=UniqueID), 
+            alpha=0.5) +
+  facet_wrap(~Statistic, 
+             scales="free_y")
+
+abs_gg3 <- ggplotly(abs_p3, 
+                    height = 600, 
+                    width = 500) 
+
+highlight(abs_gg3) 
+```
+
+]
+
+<div align="right">
+`r anicon::nia("Click on a line", animate="bounce", anitype="hover", colour="#D93F00")`
+</div>
+]
+
+.right-plot[
+```{r ref.label="abs-linking2", echo=FALSE}
+```
+
+]
+---
+# Exploration vs explanation
+
+<center>
+.top10-color-box[These two displays were in support of exploration.]
+</center>
+
+<br><br><br><br>
+We didn't know a lot about the data. 
+<br><br>Based on the data description we identified several questions of interest. <br><br>The linked plots assisted in answering the question about temporal trend, and also relative to state. 
+
+
+<!-- Exercise: Make scatterplot of two variables and link the two plots using point to point linking -->
+
+---
+# Special purpose linked plots
+
+.s500[
+.font_small[
+```{r tsibbletalk, results='hide', fig.show='hide'}
+library(tsibble)
+library(tsibbletalk)
+## ---- tourism-shared
+tourism_shared <- tourism_monthly %>%
+  as_shared_tsibble(
+    spec = (State / Region) * Purpose)
+## ---- plotly-key-tree
+p_l <- plotly_key_tree(tourism_shared, 
+                       height = 1100, 
+                       width = 800)
+## ---- tourism-series
+p_tr <- tourism_shared %>%
+  ggplot(aes(x = Month, y = Trips)) +
+  geom_line(aes(group = Region), alpha = .5, size = .4) +
+  facet_wrap(~ Purpose, scales = "free_y") +
+  scale_x_yearmonth(date_breaks = "5 years", date_labels = "%Y")
+## ---- tourism-scatter
+library(feasts)
+tourism_feat <- tourism_shared %>%
+  features(Trips, feat_stl)
+p_br <- tourism_feat %>%
+  ggplot(aes(x = trend_strength, y = seasonal_strength_year)) +
+  geom_point(aes(group = Region), alpha = .8, size = 2)
+## ---- tourism-multi
+subplot(p_l,
+  subplot(
+    ggplotly(p_tr, tooltip = "Region", 
+             width = 700, height = 800),
+    ggplotly(p_br, tooltip = "Region", 
+             width = 700, height = 800),
+    nrows = 2),
+  widths = c(.4, .6)) %>%
+  highlight(dynamic = TRUE)
+```
+]]
+
+<div class="tag center animated rubberBand" style="position:absolute;top:2%;left:12%;transform:rotate(-3deg);">
+demo 
+</div>
+---
+
+class: exercise middle hide-slide-number
+
+
+<i class="fas fa-users"></i>
+
+# <i class="fas fa-code"></i> Open `day2-exercise-02.Rmd`
+
+<center>
+`r countdown::countdown(15, class = "clock")`
+</center>
+---
+# Learning more
+
+- Sievert (2019) [Interactive web-based data visualization with R, plotly, and shiny](https://plotly-r.com)
+- [RStudio's htmlwidgets gallery](http://gallery.htmlwidgets.org)
+- [RStudio's crosstalk guide](https://rstudio.github.io/crosstalk/)
+- [tsibbletalk](https://github.com/earowang/tsibbletalk)
+
+---
+
+```{r endslide, child="assets/endslide.Rmd"}
+```
+

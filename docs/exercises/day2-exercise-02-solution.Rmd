@@ -1,0 +1,85 @@
+---
+title: "Day 2 Exercise 2 Solution: Digging deeper into reactive elements in shiny"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+Push the `knit` button!
+
+
+```{r setup, child="exercise-setup.Rmd", eval = file.exists("exercise-setup.Rmd")}
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  fig.path = "images/day2-exercise-01/",
+  class.source = "solution",
+  message = FALSE,
+  error = FALSE,
+  warning = FALSE,
+  fig.height = 3,
+  fig.width = 10
+)
+```
+
+```{r pkgs, message = FALSE, warning = FALSE}
+library(tidyverse) # contains ggplot2, dplyr, tidyr, etc
+library(plotly)
+```
+
+Load the `abs` data with 
+
+```{r}
+load(here::here("data/abs.rda"))
+```
+
+### Exercise 1.1: Animated scatterplot
+
+Make an animation of `Unemployed` by `Renting` over time for the `abs` data. 
+ 
+```{r day2-exercise-01, echo = T, class = "target"}
+a1 <- ggplot(abs, aes(
+    x=Unemployed, 
+    y=Renting, 
+    colour=State)) + 
+  geom_point(aes(frame=year, #<<
+                 ids=UniqueID)) + #<<
+  scale_colour_brewer("", 
+     palette = "Dark2")
+ggplotly(a1, width=500, height=500) 
+```
+
+### Exercise 1.2: Linked time series
+
+Compute the yearly average by state for each of the `abs` statistics. Make a linked multiple time series display of the four statistics.
+
+```{r day2-exercise-02, echo = T, class = "target"}
+abs_state <- abs %>%
+  group_by(year, State) %>%
+  summarise_at(vars(Mortgage:Unemployed), 
+               mean, na.rm=TRUE, .groups="drop") %>%
+  pivot_longer("Mortgage":"Unemployed", 
+               names_to ="Statistic", 
+               values_to = "Percentage")
+
+abs_key <- highlight_key(abs_state, 
+                         ~State) 
+
+abs_p <- ggplot(abs_key, 
+                 aes(x=year,
+                     y=Percentage)) + 
+  geom_line(aes(group=State), 
+            alpha=0.5) +
+  facet_wrap(~Statistic, 
+             scales="free_y")
+
+abs_gg <- ggplotly(abs_p, 
+                    height = 600, 
+                    width = 500) 
+
+highlight(abs_gg)
+```
+
+

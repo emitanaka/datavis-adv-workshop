@@ -1,0 +1,68 @@
+---
+title: "Day 1 Exercise 2 Solution: Harnessing `grid` on `ggplot2` outputs"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  fig.align = "center"
+)
+```
+
+```{r pkgs}
+library(ggplot2)
+library(grid)
+```
+
+
+### Exercise 2.1: Line of best fit
+
+```{r day1-exercise-02-01As, fig.width = 3, fig.height = 3}
+ggplot(cars, aes(speed, dist)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ x)
+
+grid.force()
+grid.ls()
+grid.edit(grid.grep("GRID.polyline", grep = TRUE), gp = gpar(col = "red"))
+```
+
+
+```{r day1-exercise-02-01Bs, fig.width = 3, fig.height = 3}
+ggplot(cars, aes(speed, dist)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ x) +
+  ggtitle("Best line of fit")
+grid.segments(0.3, 0.92, 
+              0.4, 0.35,
+              arrow = arrow(angle = 10, type = "closed"),
+              gp = gpar(fill = "black"))
+```
+
+
+### Exercise 2.2: Side-by-side plots with annotations
+
+```{r day1-exercise-02-02As}
+g1 <- ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
+  geom_point() + 
+  ggtitle("Sepal")
+
+g2 <- ggplot(iris, aes(Petal.Length, Petal.Width)) +
+  geom_point() + 
+  ggtitle("Petal")
+
+gr1 <- ggplot_gtable(ggplot_build(g1))
+gr2 <- ggplot_gtable(ggplot_build(g2))
+vp1 <- viewport(width = 0.5, height = 0.5, x = 0.25)
+vp2 <- viewport(width = 0.25, height = 0.25, x = 0.75)
+pushViewport(vp1)
+grid.draw(gr1)
+popViewport()
+pushViewport(vp2)
+grid.draw(gr2)
+grid.circle(gp = gpar(col = "red", fill = "transparent"), r = 1)
+```

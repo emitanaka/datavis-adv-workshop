@@ -1,0 +1,21 @@
+---
+title: "Help!"
+author: "Emi Tanaka & Di Cook & Mitchell O’Hara-Wild"
+date: "6th December 2021"
+---
+
+* If you need help, have any issues, or came late and missed the instructions, do let us know!
+* The workshop teaching team is Emi Tanaka, Di Cook and Mitchell O'Hara-Wild.
+* If you'd like help, please flag Di, Emi or Mitch by sending a chat message in zoom or raising hand (you should see a control like below in zoom to raise your hand).
+
+<center>
+<img src="slides/images/zoom-help.png">
+</center>
+
+* One of us will take you to a separate break out room to try to resolve the issue.
+
+## Contact
+
+* Emi Tanaka: emi.tanaka@monash.edu  
+* Di Cook: dicook@monash.edu
+* Mitchell O’Hara-Wild: mitch.ohara-wild@monash.edu

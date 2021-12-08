@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Advanced Data Visualisation with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Emi Tanaka" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/font-awesome-all.css" type="text/css" />
+    <link rel="stylesheet" href="assets/tachyons-addon.css" type="text/css" />
+    <link rel="stylesheet" href="assets/animate.css" type="text/css" />
+    <link rel="stylesheet" href="assets/fira-code.css" type="text/css" />
+    <link rel="stylesheet" href="assets/boxes.css" type="text/css" />
+    <link rel="stylesheet" href="assets/styles.css" type="text/css" />
+    <link rel="stylesheet" href="assets/monash-brand.css" type="text/css" />
+    <link rel="stylesheet" href="assets/monash-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="assets/slide-types.css" type="text/css" />
+    <link rel="stylesheet" href="assets/table.css" type="text/css" />
+    <link rel="stylesheet" href="assets/custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+class: middle center hide-slide-number monash-bg-gray80
+
+
+
+
+
+.info-box.w-60.bg-white[
+These slides are viewed best by Chrome or Firefox and occasionally need to be refreshed if elements did not load properly. See &lt;a href=day1-session0.pdf&gt;here for the PDF &lt;i class="fas fa-file-pdf"&gt;&lt;/i&gt;&lt;/a&gt;. 
+]
+
+&lt;br&gt;
+
+.white[Press the **right arrow** to progress to the next slide!]
+
+
+
+---
+
+class: title-slide
+count: false
+background-image: url("images/bg-01.png")
+
+# .monash-blue[Advanced Data Visualisation with R]
+
+&lt;h1 class="monash-blue" style="font-size: 30pt!important;"&gt;&lt;/h1&gt;
+
+&lt;br&gt;
+
+&lt;h2 style="font-weight:900!important;"&gt;Getting started&lt;/h2&gt;
+
+.bottom_abs.width100[
+
+Instructor: *Emi Tanaka*
+
+
+
+&lt;i class="fas fa-envelope"&gt;&lt;/i&gt;  emi.tanaka@monash.edu
+
+&lt;i class="fas fa-calendar-alt"&gt;&lt;/i&gt; 8th Dec 2021 @ Statistical Society of Australia Canberra Branch | Zoom
+
+&lt;br&gt;
+
+]
+
+
+
+---
+
+class: fullscreen
+
+.flex.h-100[
+.pa4.w-40.monash-bg-blue.br.white[
+.circle-image-200.center[
+&lt;img src="https://emitanaka.org/images/avatar.jpg" width = "200px"/&gt;
+]
+
+&lt;br&gt;
+
+# Emi Tanaka
+*Lecturer in Statistics*  
+Monash University
+
+&lt;br&gt;
+
+&lt;i class="fas fa-globe"&gt;&lt;/i&gt; .monash-white[https://emitanaka.org/]
+
+&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; emi.tanaka@monash.edu
+
+&lt;i class="fab fa-twitter"&gt;&lt;/i&gt; @statsgen
+
+]
+
+.pa5.w-60[
+
+# About your instructor
+
+* She moved to Melbourne in Jan 2020 to start her job at Monash
+* She teaches R at university courses as well as use it daily for research and hobby 
+* If you ever wonder who answers those stackoverflow questions, she's one of those magic fairies 
+
+&lt;center&gt;
+&lt;a href="https://stackexchange/users/10113966/emi"&gt;&lt;img src="https://stackoverflow.com/users/flair/10113966.png" width="208" height="58" alt="profile for Emi at Stack Overflow, Q&amp;amp;A for professional and enthusiast programmers" title="profile for Emi at Stack Overflow, Q&amp;amp;A for professional and enthusiast programmers" style="border:solid 2px black;"&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+* Her main statistical application is agriculture and bioinformatics; these days she does more software development
+
+]]
+
+---
+
+
+class: fullscreen
+
+.flex.h-100[
+.pa4.w-40.monash-bg-blue.br.white[
+.circle-image-200.center[
+&lt;img src="images/mitch.jpg" width = "200px"/&gt;
+]
+
+&lt;br&gt;
+
+# Mitchell O'Hara Wild
+
+
+&lt;br&gt;
+
+&lt;i class="fas fa-globe"&gt;&lt;/i&gt; .monash-white[https://www.mitchelloharawild.com/]
+
+&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; mail@mitchelloharawild.com
+
+&lt;i class="fab fa-twitter"&gt;&lt;/i&gt; @mitchoharawild
+
+]
+
+.pa5.w-60[
+
+# About your helper
+
+
+* Mitchell O'Hara-Wild is a data science developer, consultant, educator, and hobbyist. 
+* He is the lead developer of many R packages, including the tidy time series forecasting package 'fable', and R Markdown CV writing package 'vitae'. 
+* Mitchell also teaches data analysis skills and undertakes research at Monash University in Australia. 
+* Data also finds its way into his hobbies, to help manage the veggie patch, chickens, bees and more.
+
+
+]]
+
+
+
+
+
+
+---
+
+class: center middle
+
+
+&lt;i class="fas fa-user-alt monash-blue font_large animated bounce"&gt;&lt;/i&gt;
+
+.font_large.monash-blue[Introduce yourself in the chat!]
+
+&lt;br&gt;
+
+What's your profession?  
+
+Where do you live?
+
+What's your hobby? 
+
+What's would you like for people to know about you? 
+
+
+
+---
+
+# Schedule
+
+&lt;br&gt;
+
+Time | Activity 
+:----|:---
+8.45-9.00 | Registration + Installation Help
+9.00-9.45 | **Lesson 1:** Getting started &amp; R Graphics using `grid`
+9.45-10.00 |  *Break*
+10.00-10.45 | **Lesson 2:**  `ggplot2` internals
+10.45-11.00 |  *Break*
+11.00-11.45 | **Lesson 3:** Writing `ggplot2` extensions
+11.45-12.00 |  *Break*
+
+
+
+---
+
+
+# Getting Started
+
+
+&lt;br&gt;&lt;br&gt;
+
+.center[
+
+.blue.font_large[&lt;i class="fas fa-globe"&gt;&lt;/i&gt; http://emitanaka.org/datavis-adv-workshop/]
+
+]
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+
+.center[
+.font_large[&lt;i class="fas fa-download"&gt;&lt;/i&gt; Click [here](https://github.com/emitanaka/datavis-adv-workshop/archive/refs/heads/master.zip) to download today's materials as a ZIP file.]
+]
+
+---
+
+class: center
+
+# Help me!
+
+&lt;br&gt;&lt;br&gt;
+
+You can write in the chat.
+
+&lt;br&gt;
+
+You can ask (unmute yourself).
+
+&lt;br&gt;
+
+You can raise hand from zoom under Participants.
+
+&lt;img src="images/zoom-help.png"&gt;
+
+&lt;br&gt;
+
+We'll come around in breakout sessions.
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLanguage": "r",
+"highlightLines": true,
+"highlightSpans": false,
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%/%total%",
+"navigation": {
+"scroll": false,
+"touch": true,
+"click": false
+},
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

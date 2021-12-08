@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Day 2: Advanced data visualization with R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Di Cook" />
+    <script src="libs/header-attrs-2.11.3/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link href="libs/font-awesome-animation-1.0/font-awesome-animation-emi.css" rel="stylesheet" />
+    <script src="libs/fontawesome-5.0.13/js/fontawesome-all.min.js"></script>
+    <link rel="stylesheet" href="assets/animate.css" type="text/css" />
+    <link rel="stylesheet" href="assets/custom.css" type="text/css" />
+    <link rel="stylesheet" href="assets/fira-code.css" type="text/css" />
+    <link rel="stylesheet" href="assets/boxes.css" type="text/css" />
+    <link rel="stylesheet" href="assets/styles2.css" type="text/css" />
+    <link rel="stylesheet" href="assets/monash-brand.css" type="text/css" />
+    <link rel="stylesheet" href="assets/table.css" type="text/css" />
+    <link rel="stylesheet" href="assets/tachyons-addon.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+class: monash-bg-blue center middle hide-slide-number 
+
+
+
+&lt;div class="bg-black white"  style="width:45%;right:0;bottom:0;padding-left:5px;border: solid 4px white;margin: auto;"&gt;
+&lt;i class="fas fa-exclamation-circle"&gt;&lt;/i&gt; These slides are viewed best by Chrome and occasionally need to be refreshed if elements did not load properly. See here for &lt;a href=day2-session0.pdf&gt;PDF &lt;i class="fas fa-file-pdf"&gt;&lt;/i&gt;&lt;/a&gt;. 
+&lt;/div&gt;
+
+.white[Push the **right arrow key** to see the next slide.]
+
+
+
+---
+
+count: false
+background-image: url(images/d2bg1.jpg)
+background-size: cover
+class: hide-slide-number title-slide
+
+
+&lt;div class="grid-row" style="grid: 1fr / 2fr;"&gt;
+
+.item.center[
+
+# &lt;span style="text-shadow: 2px 2px 30px white;"&gt;Day 2: Advanced data visualization with R&lt;/span&gt;
+
+&lt;!-- ## &lt;span style="color:yellow;text-shadow: 2px 2px 30px black;"&gt;Introduction&lt;/span&gt; --&gt;
+
+]
+
+.center.shade_black.animated.bounceInUp.slower[
+&lt;br&gt;&lt;br&gt;
+## Introduction
+
+&lt;br&gt;
+
+Presented by Di Cook
+
+Department of Econometrics and Business Statistics
+
+&lt;img src="images/monash-one-line-reversed.png" style="width:500px"&gt;&lt;br&gt;
+<span>&lt;i class="fas  fa-envelope faa-float animated "&gt;&lt;/i&gt;</span>  dicook@monash.edu
+<span>&lt;i class="fab  fa-twitter faa-float animated faa-fast "&gt;&lt;/i&gt;</span>  @visnut
+
+.bottom_abs.width100.bg-black[
+8-9th Dec 2021 @ Statistical Society of Australia | Zoom
+]
+
+
+]
+
+&lt;/div&gt;
+
+
+
+
+
+
+---
+
+&lt;div class="grid" style="grid: 1fr / 1.2fr 2fr;"&gt;
+&lt;div class="item white monash-bg-blue border-right"&gt;
+&lt;br&gt;
+
+&lt;div class="circle-image"&gt;
+&lt;center&gt;
+&lt;img src="http://dicook.org/img/dicook-2019.png" width = "150px"/&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+
+**Di Cook** &lt;br&gt;
+*Professor of Business Analytics*&lt;br&gt;
+Monash University
+
+&lt;br&gt;
+
+&lt;i class="fas fa-globe"&gt;&lt;/i&gt; https://dicook.org/
+
+&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; dicook@monash.edu
+
+&lt;i class="fab fa-twitter"&gt;&lt;/i&gt; @visnut
+
+&lt;/div&gt;
+
+&lt;div class="item"&gt;
+
+&lt;h1&gt;About your instructor&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;In July 2015 I moved home to Australia after many years of education and work in the USA&lt;/li&gt;
+&lt;li&gt;I have been using R since it first emerged from Auckland, NZ in 1995, and I am an elected member of the R Foundation <span>&lt;i class="fas  fa-quidditch faa-spin animated-hover "&gt;&lt;/i&gt;</span>&lt;/li&gt;
+&lt;li&gt;I am one of four editors of the R Journal editorial team that publishes articles about R packages <span>&lt;i class="fas  fa-book faa-tada animated-hover "&gt;&lt;/i&gt;</span>&lt;/li&gt;
+
+&lt;li&gt;My main statistical application areas are sports, ecology and bioinformatics; and I like to develop new software&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+
+---
+
+
+class: fullscreen
+
+&lt;div class="grid" style="grid: 1fr / 1.2fr 2fr;"&gt;
+&lt;div class="item white monash-bg-blue border-right"&gt;
+&lt;br&gt;
+
+&lt;div class="circle-image"&gt;
+&lt;center&gt;
+&lt;img src="images/mitch.jpg" width = "150px"/&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+
+**Mitchell O'Hara Wild**
+
+
+&lt;br&gt;
+
+.monash-white[https://www.mitchelloharawild.com]
+
+&lt;i class="fas fa-envelope"&gt;&lt;/i&gt; mail@mitchelloharawild.com
+
+&lt;i class="fab fa-twitter"&gt;&lt;/i&gt; @mitchoharawild
+
+&lt;/div&gt;
+
+&lt;div class="item"&gt;
+
+&lt;h1&gt; About your helper &lt;/h1&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt; Mitchell O'Hara-Wild is a data science developer, consultant, educator, and hobbyist. 
+&lt;li&gt; He is the lead developer of many R packages, including the tidy time series forecasting package 'fable', and R Markdown CV writing package 'vitae'. 
+&lt;li&gt; Mitchell also teaches data analysis skills and undertakes research at Monash University in Australia. 
+&lt;li&gt; Data also finds its way into his hobbies, to help manage the veggie patch, chickens, bees and more.
+&lt;/ul&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+---
+
+
+class: center middle
+
+
+&lt;i class="fas fa-user-alt monash-blue font_large animated bounce"&gt;&lt;/i&gt;
+
+.font_large.monash-blue[Please say hello in the chat!]
+
+&lt;br&gt;
+
+What did you like most about yesterday's workshop?
+
+
+---
+
+# Schedule
+
+&lt;br&gt;
+
+Time | Activity 
+:----|:---
+9.00-9.45 | **Lesson 1:** Overview of tools for interactive plots
+9.45-10:00 |  *Break*
+10:00-10.45 | **Lesson 2:** Digging deeper into reactive elements in shiny 
+10.45-11.00 | *Break*
+11.00-12:00 | **Lesson 3:** Web apps to deliver effective data visualisation 
+
+---
+
+# Getting Started
+
+
+&lt;br&gt;&lt;br&gt;
+
+.center[
+
+.blue.font_large[&lt;i class="fas fa-globe"&gt;&lt;/i&gt; http://emitanaka.org/datavis-adv-workshop/]
+
+]
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+
+.center[
+.font_large[&lt;i class="fas fa-download"&gt;&lt;/i&gt; Click [here](https://github.com/emitanaka/datavis-adv-workshop/archive/refs/heads/master.zip) to download today's materials as a ZIP file.]
+]
+
+---
+
+class: center
+
+# Help me!
+
+&lt;br&gt;&lt;br&gt;
+
+You can write in the chat.
+
+&lt;br&gt;
+
+You can ask (unmute yourself).
+
+&lt;br&gt;
+
+You can raise hand from zoom under Participants.
+
+&lt;img src="images/zoom-help.png"&gt;
+
+&lt;br&gt;
+
+We'll come around in breakout sessions.
+
+
+---
+
+
+
+class: font_smaller
+background-color: #e5e5e5
+
+# Session Information
+
+.overflow-scroll.h-80[
+
+
+```r
+devtools::session_info()
+```
+
+```
+## ─ Session info ───────────────────────────────────────────────────────────────
+##  setting  value                       
+##  version  R version 4.1.0 (2021-05-18)
+##  os       macOS Big Sur 10.16         
+##  system   x86_64, darwin17.0          
+##  ui       X11                         
+##  language (EN)                        
+##  collate  en_AU.UTF-8                 
+##  ctype    en_AU.UTF-8                 
+##  tz       Australia/Melbourne         
+##  date     2021-12-08                  
+## 
+## ─ Packages ───────────────────────────────────────────────────────────────────
+##  package     * version     date       lib source                            
+##  anicon        0.1.0       2021-07-14 [1] Github (emitanaka/anicon@0b756df) 
+##  bslib         0.3.1       2021-10-06 [1] CRAN (R 4.1.0)                    
+##  cachem        1.0.6       2021-08-19 [1] CRAN (R 4.1.0)                    
+##  callr         3.7.0       2021-04-20 [1] CRAN (R 4.1.0)                    
+##  cli           3.1.0       2021-10-27 [1] CRAN (R 4.1.0)                    
+##  crayon        1.4.2       2021-10-29 [1] CRAN (R 4.1.0)                    
+##  desc          1.4.0       2021-09-28 [1] CRAN (R 4.1.0)                    
+##  devtools      2.4.2       2021-06-07 [1] CRAN (R 4.1.0)                    
+##  digest        0.6.28      2021-09-23 [1] CRAN (R 4.1.0)                    
+##  ellipsis      0.3.2       2021-04-29 [1] CRAN (R 4.1.0)                    
+##  evaluate      0.14        2019-05-28 [1] CRAN (R 4.1.0)                    
+##  fastmap       1.1.0       2021-01-25 [1] CRAN (R 4.1.0)                    
+##  fs            1.5.0       2020-07-31 [1] CRAN (R 4.1.0)                    
+##  glue          1.5.0       2021-11-07 [1] CRAN (R 4.1.0)                    
+##  htmltools     0.5.2       2021-08-25 [1] CRAN (R 4.1.0)                    
+##  icon          0.1.0       2021-07-14 [1] Github (emitanaka/icon@8458546)   
+##  jquerylib     0.1.4       2021-04-26 [1] CRAN (R 4.1.0)                    
+##  jsonlite      1.7.2       2020-12-09 [1] CRAN (R 4.1.0)                    
+##  knitr         1.36        2021-09-29 [1] CRAN (R 4.1.0)                    
+##  lifecycle     1.0.1       2021-09-24 [1] CRAN (R 4.1.0)                    
+##  magrittr      2.0.1       2020-11-17 [1] CRAN (R 4.1.0)                    
+##  memoise       2.0.1       2021-11-26 [1] CRAN (R 4.1.0)                    
+##  pkgbuild      1.2.0       2020-12-15 [1] CRAN (R 4.1.0)                    
+##  pkgload       1.2.1       2021-04-06 [1] CRAN (R 4.1.0)                    
+##  prettyunits   1.1.1       2020-01-24 [1] CRAN (R 4.1.0)                    
+##  processx      3.5.2       2021-04-30 [1] CRAN (R 4.1.0)                    
+##  ps            1.6.0       2021-02-28 [1] CRAN (R 4.1.0)                    
+##  purrr         0.3.4       2020-04-17 [1] CRAN (R 4.1.0)                    
+##  R6            2.5.1       2021-08-19 [1] CRAN (R 4.1.0)                    
+##  remotes       2.4.0       2021-06-02 [1] CRAN (R 4.1.0)                    
+##  rlang         0.99.0.9001 2021-11-30 [1] Github (r-lib/rlang@5aefc4a)      
+##  rmarkdown     2.11.3      2021-10-18 [1] Github (rstudio/rmarkdown@ebf0d09)
+##  rprojroot     2.0.2       2020-11-15 [1] CRAN (R 4.1.0)                    
+##  rstudioapi    0.13        2020-11-12 [1] CRAN (R 4.1.0)                    
+##  sass          0.4.0       2021-05-12 [1] CRAN (R 4.1.0)                    
+##  sessioninfo   1.1.1       2018-11-05 [1] CRAN (R 4.1.0)                    
+##  stringi       1.7.6       2021-11-29 [1] CRAN (R 4.1.0)                    
+##  stringr       1.4.0       2019-02-10 [1] CRAN (R 4.1.0)                    
+##  testthat      3.0.4       2021-07-01 [1] CRAN (R 4.1.0)                    
+##  usethis       2.1.0       2021-10-16 [1] CRAN (R 4.1.0)                    
+##  withr         2.4.2       2021-04-18 [1] CRAN (R 4.1.0)                    
+##  xaringan      0.22        2021-06-23 [1] CRAN (R 4.1.0)                    
+##  xfun          0.28        2021-11-04 [1] CRAN (R 4.1.0)                    
+##  yaml          2.2.1       2020-02-01 [1] CRAN (R 4.1.0)                    
+## 
+## [1] /Library/Frameworks/R.framework/Versions/4.1/Resources/library
+```
+]
+
+
+These slides are licensed under &lt;br&gt;&lt;center&gt;&lt;a href="https://creativecommons.org/licenses/by-sa/3.0/au/"&gt;&lt;img src="images/cc.svg" style="height:2em;"/&gt;&lt;img src="images/by.svg" style="height:2em;"/&gt;&lt;img src="images/sa.svg" style="height:2em;"/&gt;&lt;/a&gt;&lt;/center&gt;
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "googlecode",
+"highlightLanguage": "r",
+"highlightLines": true,
+"highlightSpans": false,
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%/%total%",
+"navigation": {
+"scroll": false,
+"touch": true,
+"click": false
+},
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'assets/mathjax-local/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

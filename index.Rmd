@@ -1,0 +1,52 @@
+---
+title: "Advanced Data Visualisation with R"
+author: ["Emi Tanaka", "Di Cook"]
+date: "8-9th December 2021"
+---
+
+
+Welcome to the Advanced Data Visualisation with R Workshop!
+
+This workshop is organised by [Statistical Society of Australia Canberra Branch](https://www.statsoc.org.au/event-4538407) and delivered by Prof Di Cook and Dr Emi Tanaka.
+
+## About the workshop:
+
+Are you familiar with how to use ggplot2 for creating graphics? Do you want to delve deeper into advanced programming with ggplot2, extend your plots with interactivity and embed them in a web app?  In this workshop, we teach about the internals of the ggplot2, meta-programming concepts to help you program with ggplot2, and deliver web apps for flexible and effective data visualisation. 
+
+## About the presenters:
+
+Dianne Cook is Professor of Business Analytics at Monash University in Melbourne, Australia.  She is a world leader in data visualisation, especially the visualisation of high-dimensional data using tours with low-dimensional projections, and projection pursuit.  She is currently focusing on bridging the gap between exploratory graphics and statistical inference.  Di is a Fellow of the American Statistical Association, past editor of the Journal of Computational and Graphical Statistics, current editor of the R Journal, elected Ordinary Member of the R Foundation, and elected member of the International Statistical Institute. 
+
+Emi Tanaka is a Lecturer in Statistics at Monash University and the incoming President of SSA Vic. She is currently working on a statistical theory for conducting inference using data plots and is an early career researcher in multi-level modelling, and experimental design. She is an experienced and enthusiastic R user and instructor, and regularly teaches university courses and workshops to the broader community on data visualisation, including ggplot2.
+
+
+## Learning objectives:
+
+### Day 1
+
+* Drawing with the grid package 
+* Internals of ggplot2 and writing extensions
+* Programming with ggplot2
+
+### Day 2
+
+* Overview of tools for interactive plots
+* Digging deeper into reactive elements in shiny
+* Web apps to deliver effective data visualisation  
+
+## Requirements:
+
+* Intermediate R knowledge (you use R on a regular basis, are comfortable writing code from scratch, routinely create data plots using ggplot2, familiar with concepts in Cookbook for R by Winston Chang)
+* basic statistics (e.g. simple linear regression, hypothesis testing, basic summary statistics and plots)
+* computer (with ability to install R and R-packages), microphone and web camera
+* stable internet connection
+* Install the video conferencing software, zoom and know how to use zoom
+* Have a (free) account on shinyapps.io
+
+## Desirable:
+
+* Some familiarity with tidyverse
+* Understand quasiquotation
+* Know the S3 object oriented programming system
+* Familiar with functional programming
+* Familiarity with shiny

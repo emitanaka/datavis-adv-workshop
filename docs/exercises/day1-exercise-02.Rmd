@@ -1,0 +1,68 @@
+---
+title: "Day 1 Exercise 2: Harnessing `grid` on `ggplot2` outputs"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+Push the `knit` button!
+
+If the image is not showing up, first open the corresponding solution file (in the same location as this file) and `knit`. 
+
+
+```{r setup, child="exercise-setup.Rmd", eval = file.exists("exercise-setup.Rmd")}
+```
+
+```{r pkgs, message = FALSE, warning = FALSE}
+library(ggplot2)
+library(grid)
+```
+
+
+### Exercise 2.1: Line of best fit
+
+* Change the best line of fit below to a red color using `grid` only
+
+
+```{r day1-exercise-02-01A, fig.width = 3, fig.height = 3, fig.align = "center"}
+ggplot(cars, aes(speed, dist)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE, formula = y ~ x) + 
+  ggtitle("Line of best fit")
+
+grid.force()
+grid.ls()
+```
+
+* Draw a line using `grid` that points from the title to the line of best fit in the above plot 
+
+
+### Exercise 2.2: Side-by-side plots with annotations
+
+* Draw the plots below side-by-side such that the dimension of the right plot is half of the one on the left using `grid` (some of the code has been written for you )
+* Then draw a red circle around the right plot
+
+```{r day1-exercise-02-02A, fig.width = 4, fig.height = 3, fig.align = "center"}
+g1 <- ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
+  geom_point() + 
+  ggtitle("Sepal")
+
+g2 <- ggplot(iris, aes(Petal.Length, Petal.Width)) +
+  geom_point() + 
+  ggtitle("Petal")
+
+g1 
+g2
+```
+
+```{r day1-exercise-02-02As, eval = FALSE}
+gr1 <- ggplot_gtable(ggplot_build(g1))
+gr2 <- ggplot_gtable(ggplot_build(g2))
+vp1 <- viewport(width = 0.5, height = 0.5, x = 0.25)
+vp2 <- viewport(width = 0.25, height = 0.25, x = 0.75)
+...
+```
+
+
+
